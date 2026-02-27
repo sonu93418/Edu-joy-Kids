@@ -1,0 +1,244 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@300;400;700&family=Quicksand:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --font-comic: 'Comic Neue', cursive;
+  --font-quicksand: 'Quicksand', sans-serif;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, #e564fe, #1e90ff);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(45deg, #d441f0, #1c86ee);
+}
+
+/* Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-quicksand);
+  line-height: 1.6;
+  color: #333;
+  overflow-x: hidden;
+}
+
+/* Custom Components */
+.btn-fun {
+  @apply px-6 py-3 bg-gradient-to-r from-edujoy-primary-500 to-fun-pink text-white font-bold rounded-2xl shadow-fun transform transition-all duration-300 hover:scale-105 hover:shadow-fun-lg active:scale-95;
+}
+
+.btn-secondary {
+  @apply px-6 py-3 bg-white text-edujoy-primary-600 border-2 border-edujoy-primary-300 font-bold rounded-2xl shadow-fun transform transition-all duration-300 hover:scale-105 hover:bg-edujoy-primary-50 active:scale-95;
+}
+
+.card-fun {
+  @apply bg-white rounded-3xl shadow-fun p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-fun-lg;
+}
+
+.gradient-text {
+  @apply bg-gradient-to-r from-edujoy-primary-600 to-fun-pink bg-clip-text text-transparent;
+}
+
+/* Animations for kids */
+.wiggle {
+  animation: wiggle 1s ease-in-out infinite;
+}
+
+.float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.bounce-slow {
+  animation: bounce 2s infinite;
+}
+
+.sparkle {
+  animation: sparkle 1.5s linear infinite;
+}
+
+/* Confetti Animation */
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.confetti {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  background: #ff69b4;
+  animation: confetti-fall 3s linear forwards;
+  pointer-events: none;
+}
+
+/* Gamification Elements */
+.xp-bar {
+  @apply bg-gray-200 rounded-full overflow-hidden;
+}
+
+.xp-fill {
+  @apply bg-gradient-to-r from-fun-green to-fun-yellow h-full transition-all duration-1000 ease-out;
+}
+
+.badge {
+  @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-fun-yellow to-fun-orange text-white shadow-fun;
+}
+
+/* Learning Card Styles */
+.lesson-card {
+  @apply relative overflow-hidden bg-white rounded-3xl shadow-fun transform transition-all duration-300 hover:scale-105 hover:shadow-fun-lg cursor-pointer;
+}
+
+.lesson-card:before {
+  @apply absolute inset-0 bg-gradient-to-r from-transparent to-white opacity-0 transition-opacity duration-300;
+  content: '';
+}
+
+.lesson-card:hover:before {
+  @apply opacity-20;
+}
+
+/* Audio Visualizer */
+.audio-wave {
+  @apply w-1 bg-fun-blue rounded-full mx-0.5;
+  animation: wave 1s ease-in-out infinite alternate;
+}
+
+.audio-wave:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.audio-wave:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.audio-wave:nth-child(4) {
+  animation-delay: 0.3s;
+}
+
+@keyframes wave {
+  0% {
+    height: 10px;
+  }
+  100% {
+    height: 30px;
+  }
+}
+
+/* Progress Ring */
+.progress-ring {
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+
+/* Mascot Animation */
+.mascot-bounce {
+  animation: mascot-bounce 2s ease-in-out infinite;
+}
+
+@keyframes mascot-bounce {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Loading Animations */
+.spinner {
+  @apply w-8 h-8 border-4 border-edujoy-primary-200 border-t-edujoy-primary-600 rounded-full;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive Typography */
+@screen sm {
+  .text-responsive-xl {
+    @apply text-4xl;
+  }
+  
+  .text-responsive-lg {
+    @apply text-2xl;
+  }
+}
+
+@screen md {
+  .text-responsive-xl {
+    @apply text-5xl;
+  }
+  
+  .text-responsive-lg {
+    @apply text-3xl;
+  }
+}
+
+@screen lg {
+  .text-responsive-xl {
+    @apply text-6xl;
+  }
+  
+  .text-responsive-lg {
+    @apply text-4xl;
+  }
+}
+
+/* Focus States for Accessibility */
+button:focus,
+a:focus {
+  @apply outline-none ring-4 ring-edujoy-primary-200 ring-opacity-50;
+}
+
+/* Print Styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* Dark Mode Support (Optional) */
+@media (prefers-color-scheme: dark) {
+  .dark-mode {
+    @apply bg-gray-900 text-white;
+  }
+}
