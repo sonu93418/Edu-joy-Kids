@@ -85,13 +85,16 @@ app.use("*", (req, res) => {
   });
 });
 
-// Global error handler
+// Global error handler — always returns JSON (never HTML)
 app.use((error, req, res, next) => {
   console.error("Unhandled error:", error);
 
-  // Don't leak error details in production
+  // Avoid sending headers twice
+  if (res.headersSent) return next(error);
+
   const isDevelopment = process.env.NODE_ENV === "development";
 
+  res.setHeader("Content-Type", "application/json");
   res.status(error.status || 500).json({
     error: isDevelopment ? error.message : "Internal server error",
     code: error.code || "INTERNAL_ERROR",
@@ -132,12 +135,15 @@ process.on("SIGINT", () => {
 // Handle uncaught exceptions
 process.on("uncaughtException", (error) => {
   console.error("Uncaught exception:", error);
-  process.exit(1);
+  // Only exit for truly fatal errors
+  if (error.code === "ERR_USE_AFTER_FREE" || error.code === "EADDRINUSE") {
+    process.exit(1);
+  }
 });
 
 process.on("unhandledRejection", (reason, promise) => {
+  // Log but do NOT exit — a single failed DB query should not bring down the server
   console.error("Unhandled rejection at:", promise, "reason:", reason);
-  process.exit(1);
 });
 
 // Start the server

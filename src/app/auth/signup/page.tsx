@@ -21,6 +21,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { useAuth } from "@/store/auth-store";
+import { safeJson } from "@/lib/utils";
 import toast from "react-hot-toast";
 
 const ROLES = [
@@ -175,7 +176,12 @@ export default function SignupPage() {
         body: JSON.stringify(payload),
         credentials: "include",
       });
-      const result = await res.json();
+      const result = await safeJson<{
+        user: any;
+        accessToken: string;
+        error?: string;
+        message?: string;
+      }>(res);
       if (!res.ok)
         throw new Error(
           result.error || result.message || "Registration failed",

@@ -56,7 +56,7 @@ body {
 }
 
 .card-fun {
-  @apply bg-white rounded-3xl shadow-fun p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-fun-lg;
+  @apply bg-white rounded-3xl shadow-fun p-6;
 }
 
 .gradient-text {

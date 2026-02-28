@@ -4,16 +4,18 @@ import "./globals.css";
 import { Providers } from "@/components/providers/providers";
 import { Toaster } from "react-hot-toast";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], display: "swap" });
 const comicNeue = Comic_Neue({
   subsets: ["latin"],
   weight: ["300", "400", "700"],
   variable: "--font-comic",
+  display: "swap",
 });
 const quicksand = Quicksand({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
   variable: "--font-quicksand",
+  display: "swap",
 });
 
 export const viewport: Viewport = {

@@ -86,10 +86,48 @@ export default function DashboardLayout({
 }) {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, student, logout } = useAuth();
+  const { user, student, logout, isAuthenticated, _hasHydrated } = useAuth();
   const { totalXP, currentLevel, coins, streaks } = useGame();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  // ── Auth guard ──────────────────────────────────────────────────────────
+  useEffect(() => {
+    if (!_hasHydrated) return; // wait for localStorage to rehydrate
+    if (!isAuthenticated) {
+      router.replace(
+        `/auth/login?redirect=${encodeURIComponent(pathname ?? "/")}`,
+      );
+    }
+  }, [_hasHydrated, isAuthenticated, pathname, router]);
+
+  // Show full-page spinner until hydration is resolved
+  if (!_hasHydrated || (!isAuthenticated && _hasHydrated)) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-edujoy-primary-400 to-fun-purple flex items-center justify-center shadow-lg animate-pulse">
+            <span className="text-white text-2xl font-black">E</span>
+          </div>
+          <div className="flex gap-2">
+            <span
+              className="w-2.5 h-2.5 rounded-full bg-edujoy-primary-400 animate-bounce"
+              style={{ animationDelay: "0ms" }}
+            />
+            <span
+              className="w-2.5 h-2.5 rounded-full bg-fun-purple animate-bounce"
+              style={{ animationDelay: "150ms" }}
+            />
+            <span
+              className="w-2.5 h-2.5 rounded-full bg-fun-pink animate-bounce"
+              style={{ animationDelay: "300ms" }}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  // ─────────────────────────────────────────────────────────────────────────
 
   const role = user?.role || "parent";
   const navItems = navsByRole[role] || navsByRole.parent;

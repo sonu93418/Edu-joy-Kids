@@ -1,39 +1,39 @@
-import crypto from 'crypto';
-import nodemailer from 'nodemailer';
+import crypto from "crypto";
+import nodemailer from "nodemailer";
 
 // Email configuration
 const createTransporter = () => {
-  return nodemailer.createTransporter({
-    host: process.env.SMTP_HOST || 'smtp.gmail.com',
-    port: process.env.SMTP_PORT || 587,
-    secure: false, // true for 465, false for other ports
+  return nodemailer.createTransport({
+    host: process.env.SMTP_HOST || process.env.EMAIL_HOST || "smtp.gmail.com",
+    port: Number(process.env.SMTP_PORT || process.env.EMAIL_PORT || 587),
+    secure: (process.env.SMTP_SECURE || process.env.EMAIL_SECURE) === "true",
     auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
+      user: process.env.SMTP_USER || process.env.EMAIL_USER,
+      pass: process.env.SMTP_PASS || process.env.EMAIL_PASS,
     },
   });
 };
 
 // Generate verification token
 export const generateVerificationToken = () => {
-  return crypto.randomBytes(32).toString('hex');
+  return crypto.randomBytes(32).toString("hex");
 };
 
 // Generate OTP
 export const generateOTP = (length = 6) => {
-  const digits = '0123456789';
-  let otp = '';
-  
+  const digits = "0123456789";
+  let otp = "";
+
   for (let i = 0; i < length; i++) {
     otp += digits[Math.floor(Math.random() * digits.length)];
   }
-  
+
   return otp;
 };
 
 // Hash sensitive data
 export const hashData = (data) => {
-  return crypto.createHash('sha256').update(data).digest('hex');
+  return crypto.createHash("sha256").update(data).digest("hex");
 };
 
 // Verify hash
@@ -44,44 +44,47 @@ export const verifyHash = (data, hash) => {
 
 // Encrypt sensitive data
 export const encryptData = (text) => {
-  const algorithm = 'aes-256-gcm';
-  const key = Buffer.from(process.env.ENCRYPTION_KEY || 'your-32-character-encryption-key', 'utf8');
+  const algorithm = "aes-256-gcm";
+  const keyStr =
+    process.env.ENCRYPTION_KEY || "edujoykids-32-char-key-dev-only!!";
+  const key = Buffer.from(keyStr.slice(0, 32).padEnd(32, "0"), "utf8");
   const iv = crypto.randomBytes(16);
-  
-  const cipher = crypto.createCipher(algorithm, key);
-  cipher.setAAD(Buffer.from('edujoykids', 'utf8'));
-  
-  let encrypted = cipher.update(text, 'utf8', 'hex');
-  encrypted += cipher.final('hex');
-  
+
+  const cipher = crypto.createCipheriv(algorithm, key, iv);
+
+  let encrypted = cipher.update(text, "utf8", "hex");
+  encrypted += cipher.final("hex");
+
   const authTag = cipher.getAuthTag();
-  
+
   return {
     encrypted,
-    iv: iv.toString('hex'),
-    authTag: authTag.toString('hex')
+    iv: iv.toString("hex"),
+    authTag: authTag.toString("hex"),
   };
 };
 
 // Decrypt sensitive data
 export const decryptData = (encryptedData) => {
-  const algorithm = 'aes-256-gcm';
-  const key = Buffer.from(process.env.ENCRYPTION_KEY || 'your-32-character-encryption-key', 'utf8');
-  
-  const decipher = crypto.createDecipher(algorithm, key);
-  decipher.setAAD(Buffer.from('edujoykids', 'utf8'));
-  decipher.setAuthTag(Buffer.from(encryptedData.authTag, 'hex'));
-  
-  let decrypted = decipher.update(encryptedData.encrypted, 'hex', 'utf8');
-  decrypted += decipher.final('utf8');
-  
+  const algorithm = "aes-256-gcm";
+  const keyStr =
+    process.env.ENCRYPTION_KEY || "edujoykids-32-char-key-dev-only!!";
+  const key = Buffer.from(keyStr.slice(0, 32).padEnd(32, "0"), "utf8");
+  const iv = Buffer.from(encryptedData.iv, "hex");
+
+  const decipher = crypto.createDecipheriv(algorithm, key, iv);
+  decipher.setAuthTag(Buffer.from(encryptedData.authTag, "hex"));
+
+  let decrypted = decipher.update(encryptedData.encrypted, "hex", "utf8");
+  decrypted += decipher.final("utf8");
+
   return decrypted;
 };
 
 // Email templates
 const emailTemplates = {
   verification: (name, verificationUrl) => ({
-    subject: 'Welcome to EduJoy Kids - Verify Your Email',
+    subject: "Welcome to EduJoy Kids - Verify Your Email",
     html: `
       <div style="max-width: 600px; margin: 0 auto; font-family: 'Comic Sans MS', cursive; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px;">
         <div style="background: white; border-radius: 20px; padding: 30px; text-align: center;">
@@ -104,11 +107,11 @@ const emailTemplates = {
           </div>
         </div>
       </div>
-    `
+    `,
   }),
-  
+
   passwordReset: (name, resetUrl) => ({
-    subject: 'Reset Your EduJoy Kids Password',
+    subject: "Reset Your EduJoy Kids Password",
     html: `
       <div style="max-width: 600px; margin: 0 auto; font-family: 'Comic Sans MS', cursive; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px;">
         <div style="background: white; border-radius: 20px; padding: 30px; text-align: center;">
@@ -128,9 +131,9 @@ const emailTemplates = {
           </p>
         </div>
       </div>
-    `
+    `,
   }),
-  
+
   welcomeChild: (childName, parentName, loginUrl) => ({
     subject: `🎉 ${childName}'s Learning Adventure Begins!`,
     html: `
@@ -155,8 +158,8 @@ const emailTemplates = {
           </a>
         </div>
       </div>
-    `
-  })
+    `,
+  }),
 };
 
 // Send verification email
@@ -164,21 +167,21 @@ export const sendVerificationEmail = async (email, name, verificationToken) => {
   try {
     const transporter = createTransporter();
     const verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL}/auth/verify?token=${verificationToken}`;
-    
+
     const template = emailTemplates.verification(name, verificationUrl);
-    
+
     const mailOptions = {
       from: `"EduJoy Kids 🎈" <${process.env.SMTP_USER}>`,
       to: email,
       subject: template.subject,
-      html: template.html
+      html: template.html,
     };
-    
+
     const result = await transporter.sendMail(mailOptions);
-    console.log('Verification email sent:', result.messageId);
+    console.log("Verification email sent:", result.messageId);
     return true;
   } catch (error) {
-    console.error('Error sending verification email:', error);
+    console.error("Error sending verification email:", error);
     return false;
   }
 };
@@ -188,45 +191,53 @@ export const sendPasswordResetEmail = async (email, name, resetToken) => {
   try {
     const transporter = createTransporter();
     const resetUrl = `${process.env.NEXT_PUBLIC_APP_URL}/auth/reset-password?token=${resetToken}`;
-    
+
     const template = emailTemplates.passwordReset(name, resetUrl);
-    
+
     const mailOptions = {
       from: `"EduJoy Kids 🎈" <${process.env.SMTP_USER}>`,
       to: email,
       subject: template.subject,
-      html: template.html
+      html: template.html,
     };
-    
+
     const result = await transporter.sendMail(mailOptions);
-    console.log('Password reset email sent:', result.messageId);
+    console.log("Password reset email sent:", result.messageId);
     return true;
   } catch (error) {
-    console.error('Error sending password reset email:', error);
+    console.error("Error sending password reset email:", error);
     return false;
   }
 };
 
 // Send welcome email for child account
-export const sendWelcomeChildEmail = async (parentEmail, childName, parentName) => {
+export const sendWelcomeChildEmail = async (
+  parentEmail,
+  childName,
+  parentName,
+) => {
   try {
     const transporter = createTransporter();
     const loginUrl = `${process.env.NEXT_PUBLIC_APP_URL}/auth/login`;
-    
-    const template = emailTemplates.welcomeChild(childName, parentName, loginUrl);
-    
+
+    const template = emailTemplates.welcomeChild(
+      childName,
+      parentName,
+      loginUrl,
+    );
+
     const mailOptions = {
       from: `"EduJoy Kids 🎈" <${process.env.SMTP_USER}>`,
       to: parentEmail,
       subject: template.subject,
-      html: template.html
+      html: template.html,
     };
-    
+
     const result = await transporter.sendMail(mailOptions);
-    console.log('Welcome child email sent:', result.messageId);
+    console.log("Welcome child email sent:", result.messageId);
     return true;
   } catch (error) {
-    console.error('Error sending welcome child email:', error);
+    console.error("Error sending welcome child email:", error);
     return false;
   }
 };
@@ -235,11 +246,11 @@ export const sendWelcomeChildEmail = async (parentEmail, childName, parentName) 
 export const sendOTPEmail = async (email, name, otp) => {
   try {
     const transporter = createTransporter();
-    
+
     const mailOptions = {
       from: `"EduJoy Kids 🎈" <${process.env.SMTP_USER}>`,
       to: email,
-      subject: 'Your EduJoy Kids Verification Code',
+      subject: "Your EduJoy Kids Verification Code",
       html: `
         <div style="max-width: 600px; margin: 0 auto; font-family: 'Comic Sans MS', cursive; text-align: center; padding: 20px;">
           <h2 style="color: #e564fe;">🔐 Your Verification Code</h2>
@@ -250,14 +261,14 @@ export const sendOTPEmail = async (email, name, otp) => {
           </div>
           <p style="color: #666; font-size: 14px;">This code expires in 10 minutes.</p>
         </div>
-      `
+      `,
     };
-    
+
     const result = await transporter.sendMail(mailOptions);
-    console.log('OTP email sent:', result.messageId);
+    console.log("OTP email sent:", result.messageId);
     return true;
   } catch (error) {
-    console.error('Error sending OTP email:', error);
+    console.error("Error sending OTP email:", error);
     return false;
   }
 };

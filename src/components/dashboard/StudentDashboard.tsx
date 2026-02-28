@@ -76,6 +76,100 @@ const SvgStar = ({ size = 18, color = "#FCD34D" }: { size?: number; color?: stri
   </svg>
 );
 
+/* ── Subject Cartoon Characters ── */
+const BookChar = () => (
+  <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
+    <rect x="8" y="8" width="34" height="40" rx="5" fill="white" fillOpacity="0.92"/>
+    <rect x="8" y="8" width="9" height="40" rx="4" fill="white" fillOpacity="0.55"/>
+    <rect x="19" y="14" width="17" height="2.5" rx="1.2" fill="#1D4ED8" fillOpacity="0.4"/>
+    <rect x="19" y="19" width="13" height="2.5" rx="1.2" fill="#1D4ED8" fillOpacity="0.4"/>
+    <rect x="19" y="24" width="10" height="2.5" rx="1.2" fill="#1D4ED8" fillOpacity="0.4"/>
+    <circle cx="20" cy="35" r="5" fill="#1D4ED8"/>
+    <circle cx="32" cy="35" r="5" fill="#1D4ED8"/>
+    <circle cx="21" cy="34" r="2" fill="white"/>
+    <circle cx="33" cy="34" r="2" fill="white"/>
+    <path d="M17 42 Q26 47 35 42" stroke="#1D4ED8" strokeWidth="2" strokeLinecap="round" fill="none"/>
+  </svg>
+);
+const CalcChar = () => (
+  <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
+    <rect x="10" y="6" width="36" height="44" rx="6" fill="white" fillOpacity="0.92"/>
+    <rect x="14" y="10" width="28" height="12" rx="3" fill="#5B21B6" fillOpacity="0.45"/>
+    <circle cx="22" cy="16" r="4" fill="#4C1D95"/>
+    <circle cx="34" cy="16" r="4" fill="#4C1D95"/>
+    <circle cx="23" cy="15" r="1.5" fill="white"/>
+    <circle cx="35" cy="15" r="1.5" fill="white"/>
+    <path d="M18 23 Q28 27 38 23" stroke="#4C1D95" strokeWidth="2" strokeLinecap="round" fill="none"/>
+    <rect x="14" y="30" width="10" height="6" rx="2" fill="#7C3AED" fillOpacity="0.4"/>
+    <rect x="28" y="30" width="10" height="6" rx="2" fill="#7C3AED" fillOpacity="0.4"/>
+    <rect x="14" y="40" width="10" height="6" rx="2" fill="#7C3AED" fillOpacity="0.4"/>
+    <rect x="28" y="40" width="10" height="6" rx="2" fill="#A78BFA" fillOpacity="0.55"/>
+    <rect x="16" y="32" width="6" height="2" rx="1" fill="#7C3AED"/>
+    <rect x="31" y="32" width="6" height="2" rx="1" fill="#7C3AED"/>
+    <rect x="33" y="30" width="2" height="6" rx="1" fill="#7C3AED"/>
+  </svg>
+);
+const BeakerChar = () => (
+  <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
+    <path d="M20 8 L20 24 L8 44 Q6 50 12 50 L44 50 Q50 50 48 44 L36 24 L36 8 Z" fill="white" fillOpacity="0.88"/>
+    <rect x="18" y="8" width="20" height="5" rx="2.5" fill="white" fillOpacity="0.5"/>
+    <circle cx="18" cy="43" r="5" fill="#059669" fillOpacity="0.5"/>
+    <circle cx="36" cy="45" r="4" fill="#10B981" fillOpacity="0.45"/>
+    <circle cx="22" cy="28" r="5" fill="#065F46"/>
+    <circle cx="34" cy="30" r="5" fill="#065F46"/>
+    <circle cx="23" cy="27" r="2" fill="white"/>
+    <circle cx="35" cy="29" r="2" fill="white"/>
+    <path d="M19 37 Q28 42 37 37" stroke="#065F46" strokeWidth="2.2" strokeLinecap="round" fill="none"/>
+  </svg>
+);
+const PenChar = () => (
+  <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
+    <rect x="22" y="4" width="12" height="40" rx="6" fill="white" fillOpacity="0.92"/>
+    <rect x="22" y="4" width="12" height="7" rx="5" fill="#FCA5A5" fillOpacity="0.8"/>
+    <polygon points="22,44 34,44 28,54" fill="#FDE68A" fillOpacity="0.9"/>
+    <circle cx="22" cy="22" r="4.5" fill="#9F1239"/>
+    <circle cx="34" cy="22" r="4.5" fill="#9F1239"/>
+    <circle cx="23" cy="21" r="1.8" fill="white"/>
+    <circle cx="35" cy="21" r="1.8" fill="white"/>
+    <path d="M20 30 Q28 35 36 30" stroke="#9F1239" strokeWidth="2.2" strokeLinecap="round" fill="none"/>
+    <circle cx="40" cy="10" r="3" fill="white" fillOpacity="0.5"/>
+    <circle cx="44" cy="6" r="2" fill="white" fillOpacity="0.4"/>
+  </svg>
+);
+const MoonChar = () => (
+  <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
+    <path d="M42 28 C42 38 34 46 24 46 C18.5 46 13.5 43.5 10.5 39.5 C14 41.5 18 42.5 22 42.5 C32 42.5 40 34.5 40 24.5 C40 18.5 37 13 32 10 C38 12.5 42 19.5 42 28Z" fill="white" fillOpacity="0.92"/>
+    <circle cx="23" cy="24" r="4.5" fill="#92400E"/>
+    <circle cx="33" cy="28" r="4.5" fill="#92400E"/>
+    <circle cx="24" cy="23" r="1.8" fill="white"/>
+    <circle cx="34" cy="27" r="1.8" fill="white"/>
+    <path d="M20 34 Q27 39 35 34" stroke="#92400E" strokeWidth="2.2" strokeLinecap="round" fill="none"/>
+    <polygon points="47,6 48.8,12 44,12 48,15.5 46.5,9.5 51,6" fill="white" fillOpacity="0.75"/>
+  </svg>
+);
+const GlobeChar = () => (
+  <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
+    <circle cx="28" cy="28" r="22" fill="white" fillOpacity="0.88"/>
+    <ellipse cx="28" cy="28" rx="11" ry="22" stroke="#0E7490" strokeWidth="1.5" strokeOpacity="0.3" fill="none"/>
+    <ellipse cx="28" cy="28" rx="22" ry="8" stroke="#0E7490" strokeWidth="1.5" strokeOpacity="0.3" fill="none"/>
+    <circle cx="20" cy="22" r="4.5" fill="#0C4A6E"/>
+    <circle cx="32" cy="22" r="4.5" fill="#0C4A6E"/>
+    <circle cx="21" cy="21" r="1.8" fill="white"/>
+    <circle cx="33" cy="21" r="1.8" fill="white"/>
+    <path d="M17 30 Q28 35 39 30" stroke="#0C4A6E" strokeWidth="2.2" strokeLinecap="round" fill="none"/>
+    <circle cx="28" cy="28" r="22" stroke="#67E8F9" strokeWidth="2" fill="none" strokeOpacity="0.45"/>
+  </svg>
+);
+const SubjectChar = ({ id }: { id: string }) => {
+  if (id === "english")  return <BookChar />;
+  if (id === "math")     return <CalcChar />;
+  if (id === "science")  return <BeakerChar />;
+  if (id === "urdu")     return <PenChar />;
+  if (id === "islamiat") return <MoonChar />;
+  if (id === "social")   return <GlobeChar />;
+  return null;
+};
+
 /* ── Data ── */
 const SUBJECTS = [
   { id: "english",  Icon: BookOpen,   label: "English",        color: "from-blue-400 to-blue-600",         progress: 72, done: 18, total: 25 },
@@ -289,11 +383,9 @@ export default function StudentDashboard() {
                   whileTap={{ scale: 0.97 }}
                   className="rounded-2xl overflow-hidden shadow-md cursor-pointer"
                 >
-                  {/* coloured header */}
-                  <div className={`bg-gradient-to-br ${sub.color} flex items-center justify-center py-5`}>
-                    <div className="w-12 h-12 rounded-full bg-white/25 flex items-center justify-center">
-                      <sub.Icon size={26} className="text-white" />
-                    </div>
+                  {/* coloured header with cartoon mascot */}
+                  <div className={`bg-gradient-to-br ${sub.color} flex items-center justify-center py-4`}>
+                    <SubjectChar id={sub.id} />
                   </div>
                   {/* card body */}
                   <div className="bg-white p-3">

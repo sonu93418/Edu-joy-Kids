@@ -17,6 +17,7 @@ import {
   Rocket,
 } from "lucide-react";
 import { useAuth } from "@/store/auth-store";
+import { safeJson } from "@/lib/utils";
 import toast from "react-hot-toast";
 
 const loginSchema = z.object({
@@ -151,7 +152,12 @@ export default function LoginPage() {
         body: JSON.stringify(data),
         credentials: "include",
       });
-      const result = await res.json();
+      const result = await safeJson<{
+        user: any;
+        accessToken: string;
+        student?: any;
+        message?: string;
+      }>(res);
       if (!res.ok) throw new Error(result.message || "Login failed");
       login(result.user, result.accessToken, result.student || null);
 
@@ -178,7 +184,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-edujoy-primary-100 via-fun-blue-50 to-fun-purple-50 flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-violet-50 via-sky-50 to-fuchsia-50 flex items-center justify-center p-4 relative overflow-hidden">
       <FloatingShape x="5%" y="10%" delay={0}>
         <StarShape size={36} color="#FFD700" />
       </FloatingShape>
@@ -220,7 +226,7 @@ export default function LoginPage() {
         </Link>
 
         {/* Card */}
-        <div className="card-fun p-8">
+        <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 p-8">
           <div className="text-center mb-6">
             <motion.div
               initial={{ scale: 0, rotate: -180 }}
@@ -246,7 +252,7 @@ export default function LoginPage() {
                 type="email"
                 {...register("email")}
                 placeholder="parent@example.com"
-                className="w-full px-4 py-3 rounded-2xl border-2 border-gray-200 focus:border-edujoy-primary-400 focus:outline-none transition-colors text-gray-800 font-medium"
+                className="w-full px-4 py-3 rounded-2xl border-2 border-gray-200 bg-white focus:border-edujoy-primary-400 focus:outline-none focus:ring-2 focus:ring-edujoy-primary-100 transition-all text-gray-800 font-medium placeholder-gray-400"
               />
               {errors.email && (
                 <p className="text-red-500 text-xs mt-1">
@@ -265,7 +271,7 @@ export default function LoginPage() {
                   type={showPassword ? "text" : "password"}
                   {...register("password")}
                   placeholder="••••••••"
-                  className="w-full px-4 py-3 rounded-2xl border-2 border-gray-200 focus:border-edujoy-primary-400 focus:outline-none transition-colors text-gray-800 font-medium pr-12"
+                  className="w-full px-4 py-3 rounded-2xl border-2 border-gray-200 bg-white focus:border-edujoy-primary-400 focus:outline-none focus:ring-2 focus:ring-edujoy-primary-100 transition-all text-gray-800 font-medium pr-12 placeholder-gray-400"
                 />
                 <button
                   type="button"

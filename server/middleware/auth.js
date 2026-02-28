@@ -136,7 +136,8 @@ export const childSafetyCheck = async (req, res, next) => {
       // Check parental controls
       const now = new Date();
       const currentHour = now.getHours();
-      const currentDay = now.toLocaleLowerCase().slice(0, 3); // mon, tue, etc.
+      const days = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+      const currentDay = days[now.getDay()];
 
       // Check if current day is allowed
       if (!student.parentalControls.allowedDays.includes(currentDay)) {

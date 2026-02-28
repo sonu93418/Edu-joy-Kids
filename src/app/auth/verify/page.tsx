@@ -12,6 +12,7 @@ import {
   SendHorizonal,
 } from "lucide-react";
 import { useAuth } from "@/store/auth-store";
+import { safeJson } from "@/lib/utils";
 import toast from "react-hot-toast";
 
 // SVG decorative shapes — crisp at all sizes, no emoji
@@ -129,7 +130,7 @@ export default function VerifyEmailPage() {
         body: JSON.stringify({ email: user.email }),
         credentials: "include",
       });
-      const data = await res.json();
+      const data = await safeJson<{ message?: string }>(res);
       if (!res.ok) throw new Error(data.message || "Failed to resend");
       setResent(true);
       toast.success("Verification email resent! Check your inbox.");

@@ -1,17 +1,21 @@
-import jwt from 'jsonwebtoken';
-import { User } from '../models/index.js';
+import jwt from "jsonwebtoken";
+import { User } from "../models/index.js";
 
 // JWT configuration
-const JWT_ACCESS_SECRET = process.env.JWT_ACCESS_SECRET || 'your-access-secret';
-const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'your-refresh-secret';
-const JWT_ACCESS_EXPIRE = '15m';
-const JWT_REFRESH_EXPIRE = '7d';
+const JWT_ACCESS_SECRET =
+  process.env.JWT_ACCESS_SECRET ||
+  process.env.JWT_SECRET ||
+  "your-access-secret";
+const JWT_REFRESH_SECRET =
+  process.env.JWT_REFRESH_SECRET || "your-refresh-secret";
+const JWT_ACCESS_EXPIRE = "15m";
+const JWT_REFRESH_EXPIRE = "7d";
 
 // Generate access token
 export const generateAccessToken = (payload) => {
   return jwt.sign(payload, JWT_ACCESS_SECRET, {
     expiresIn: JWT_ACCESS_EXPIRE,
-    algorithm: 'HS256'
+    algorithm: "HS256",
   });
 };
 
@@ -19,7 +23,7 @@ export const generateAccessToken = (payload) => {
 export const generateRefreshToken = (payload) => {
   return jwt.sign(payload, JWT_REFRESH_SECRET, {
     expiresIn: JWT_REFRESH_EXPIRE,
-    algorithm: 'HS256'
+    algorithm: "HS256",
   });
 };
 
@@ -28,7 +32,7 @@ export const verifyAccessToken = (token) => {
   try {
     return jwt.verify(token, JWT_ACCESS_SECRET);
   } catch (error) {
-    throw new Error('Invalid access token');
+    throw new Error("Invalid access token");
   }
 };
 
@@ -37,7 +41,7 @@ export const verifyRefreshToken = (token) => {
   try {
     return jwt.verify(token, JWT_REFRESH_SECRET);
   } catch (error) {
-    throw new Error('Invalid refresh token');
+    throw new Error("Invalid refresh token");
   }
 };
 
@@ -47,12 +51,12 @@ export const generateTokenPair = (user) => {
     userId: user._id,
     email: user.email,
     role: user.role,
-    isVerified: user.isVerified
+    isVerified: user.isVerified,
   };
-  
+
   const accessToken = generateAccessToken(payload);
   const refreshToken = generateRefreshToken({ userId: user._id });
-  
+
   return { accessToken, refreshToken };
 };
 
@@ -61,7 +65,7 @@ export const storeRefreshToken = async (userId, refreshToken, deviceInfo) => {
   try {
     const user = await User.findById(userId);
     if (!user) {
-      throw new Error('User not found');
+      throw new Error("User not found");
     }
 
     // Remove old refresh tokens (keep only last 5)
@@ -72,15 +76,15 @@ export const storeRefreshToken = async (userId, refreshToken, deviceInfo) => {
     // Add new refresh token
     user.refreshTokens.push({
       token: refreshToken,
-      device: deviceInfo.userAgent || 'Unknown',
-      ipAddress: deviceInfo.ip || 'Unknown',
-      createdAt: new Date()
+      device: deviceInfo.userAgent || "Unknown",
+      ipAddress: deviceInfo.ip || "Unknown",
+      createdAt: new Date(),
     });
 
     await user.save();
     return true;
   } catch (error) {
-    console.error('Error storing refresh token:', error);
+    console.error("Error storing refresh token:", error);
     return false;
   }
 };
@@ -90,17 +94,17 @@ export const removeRefreshToken = async (userId, refreshToken) => {
   try {
     const user = await User.findById(userId);
     if (!user) {
-      throw new Error('User not found');
+      throw new Error("User not found");
     }
 
     user.refreshTokens = user.refreshTokens.filter(
-      tokenObj => tokenObj.token !== refreshToken
+      (tokenObj) => tokenObj.token !== refreshToken,
     );
 
     await user.save();
     return true;
   } catch (error) {
-    console.error('Error removing refresh token:', error);
+    console.error("Error removing refresh token:", error);
     return false;
   }
 };
@@ -110,14 +114,14 @@ export const removeAllRefreshTokens = async (userId) => {
   try {
     const user = await User.findById(userId);
     if (!user) {
-      throw new Error('User not found');
+      throw new Error("User not found");
     }
 
     user.refreshTokens = [];
     await user.save();
     return true;
   } catch (error) {
-    console.error('Error removing all refresh tokens:', error);
+    console.error("Error removing all refresh tokens:", error);
     return false;
   }
 };
@@ -131,12 +135,12 @@ export const validateRefreshToken = async (userId, refreshToken) => {
     }
 
     const tokenExists = user.refreshTokens.some(
-      tokenObj => tokenObj.token === refreshToken
+      (tokenObj) => tokenObj.token === refreshToken,
     );
 
     return tokenExists;
   } catch (error) {
-    console.error('Error validating refresh token:', error);
+    console.error("Error validating refresh token:", error);
     return false;
   }
 };
@@ -145,12 +149,12 @@ export const validateRefreshToken = async (userId, refreshToken) => {
 export const cleanExpiredTokens = async () => {
   try {
     const users = await User.find({
-      'refreshTokens.0': { $exists: true }
+      "refreshTokens.0": { $exists: true },
     });
 
     for (const user of users) {
       const validTokens = [];
-      
+
       for (const tokenObj of user.refreshTokens) {
         try {
           verifyRefreshToken(tokenObj.token);
@@ -159,15 +163,15 @@ export const cleanExpiredTokens = async () => {
           // Token is expired or invalid, don't include it
         }
       }
-      
+
       if (validTokens.length !== user.refreshTokens.length) {
         user.refreshTokens = validTokens;
         await user.save();
       }
     }
-    
-    console.log('Cleaned expired refresh tokens');
+
+    console.log("Cleaned expired refresh tokens");
   } catch (error) {
-    console.error('Error cleaning expired tokens:', error);
+    console.error("Error cleaning expired tokens:", error);
   }
 };
