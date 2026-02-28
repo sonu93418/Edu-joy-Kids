@@ -2,17 +2,26 @@
 
 import Link from "next/link";
 import {
-  Users, BookOpen, TrendingUp, BarChart2, PlusCircle,
-  ArrowRight, GraduationCap, CheckCircle2, ClipboardList,
-  MessageSquare, Star, Clock,
+  Users, BookOpen, FileText, BarChart2, MessagesSquare,
+  BookMarked, PlusCircle, ChevronRight, ArrowRight,
+  GraduationCap, ClipboardList,
 } from "lucide-react";
 import { useAuth } from "@/store/auth-store";
 
 const QUICK_ACTIONS = [
-  { label: "Create Lesson",  href: "/teacher", icon: PlusCircle,   style: "bg-indigo-600  text-white hover:bg-indigo-700"  },
-  { label: "My Students",    href: "/teacher", icon: Users,         style: "bg-emerald-600 text-white hover:bg-emerald-700" },
-  { label: "Assignments",    href: "/teacher", icon: ClipboardList, style: "bg-amber-500   text-white hover:bg-amber-600"   },
-  { label: "Messages",       href: "/teacher", icon: MessageSquare, style: "bg-violet-600  text-white hover:bg-violet-700"  },
+  { label: "View Students",     href: "/teacher", Icon: Users,         cls: "text-indigo-600 bg-indigo-50"   },
+  { label: "Manage Lessons",    href: "/teacher", Icon: BookOpen,      cls: "text-blue-600   bg-blue-50"     },
+  { label: "Assignments",       href: "/teacher", Icon: FileText,      cls: "text-violet-600 bg-violet-50"   },
+  { label: "Progress Reports",  href: "/teacher", Icon: BarChart2,     cls: "text-emerald-600 bg-emerald-50" },
+  { label: "Messages",          href: "/teacher", Icon: MessagesSquare,cls: "text-rose-600   bg-rose-50"     },
+  { label: "Curriculum",        href: "/teacher", Icon: BookMarked,    cls: "text-amber-600  bg-amber-50"    },
+];
+
+const STATS = [
+  { label: "Students",    value: "—",  Icon: Users,         ring: "ring-indigo-100",  ico: "text-indigo-500",  bg: "bg-indigo-50"   },
+  { label: "Lessons",     value: "—",  Icon: BookOpen,      ring: "ring-blue-100",    ico: "text-blue-500",    bg: "bg-blue-50"     },
+  { label: "Assignments", value: "—",  Icon: ClipboardList, ring: "ring-violet-100",  ico: "text-violet-500",  bg: "bg-violet-50"   },
+  { label: "Avg Score",   value: "—",  Icon: BarChart2,     ring: "ring-emerald-100", ico: "text-emerald-500", bg: "bg-emerald-50"  },
 ];
 
 export default function TeacherDashboard() {
@@ -20,122 +29,91 @@ export default function TeacherDashboard() {
   const firstName = user?.fullName?.split(" ")[0] ?? "Teacher";
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto">
+    <div className="w-full space-y-5">
 
-      {/* HEADER */}
-      <div className="bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl p-6 text-white">
-        <p className="text-amber-100 text-sm font-medium">Welcome back</p>
-        <h1 className="text-2xl font-bold mt-0.5">{firstName}</h1>
-        <p className="text-amber-100 text-sm mt-1">
-          Manage your classes, create lessons, and track student progress.
-        </p>
-        <div className="mt-4 flex flex-wrap gap-2">
-          <Link
-            href="/teacher"
-            className="inline-flex items-center gap-2 bg-white text-amber-700 font-semibold text-sm px-4 py-2 rounded-xl hover:bg-amber-50 transition-colors"
-          >
-            <PlusCircle size={14} /> Create New Lesson
-          </Link>
-          <Link
-            href="/teacher"
-            className="inline-flex items-center gap-2 bg-white/20 text-white font-semibold text-sm px-4 py-2 rounded-xl hover:bg-white/30 transition-colors"
-          >
-            <Users size={14} /> View Students
-          </Link>
+      {/* Welcome */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div>
+          <h1 className="text-xl font-bold text-gray-900">Welcome, {firstName}!</h1>
+          <p className="text-sm text-gray-500 mt-0.5">Manage your classes, lessons, and student progress.</p>
         </div>
+        <button className="inline-flex items-center gap-2 bg-indigo-600 text-white text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-indigo-700 transition-colors self-start sm:self-auto">
+          <PlusCircle size={14} /> New Lesson
+        </button>
       </div>
 
-      {/* STAT CARDS */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {[
-          { label: "My Students",     value: "—", icon: Users,         color: "text-indigo-600",  bg: "bg-indigo-50"  },
-          { label: "Total Lessons",   value: "—", icon: BookOpen,      color: "text-amber-600",   bg: "bg-amber-50"   },
-          { label: "Avg Completion",  value: "—", icon: TrendingUp,    color: "text-emerald-600", bg: "bg-emerald-50" },
-          { label: "Avg Score",       value: "—", icon: Star,          color: "text-violet-600",  bg: "bg-violet-50"  },
-        ].map(({ label, value, icon: Icon, color, bg }) => (
-          <div key={label} className="bg-white border border-gray-100 rounded-xl p-4 flex items-center gap-3 shadow-sm">
-            <div className={`${bg} p-2 rounded-lg`}><Icon size={18} className={color} /></div>
-            <div>
-              <p className="text-xs text-gray-500 font-medium">{label}</p>
-              <p className="text-lg font-bold text-gray-800">{value}</p>
+      {/* Stats */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {STATS.map(({ label, value, Icon, ring, ico, bg }) => (
+          <div key={label} className={`bg-white rounded-xl border border-gray-100 ring-1 ${ring} p-4 flex items-center gap-3`}>
+            <div className={`${bg} p-2.5 rounded-xl flex-shrink-0`}>
+              <Icon size={18} className={ico} />
+            </div>
+            <div className="min-w-0">
+              <p className="text-xs text-gray-400 font-medium truncate">{label}</p>
+              <p className="text-base font-bold text-gray-900 truncate">{value}</p>
             </div>
           </div>
         ))}
       </div>
 
-      {/* QUICK ACTIONS */}
-      <div>
-        <h2 className="text-base font-bold text-gray-800 mb-3">Quick Actions</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {QUICK_ACTIONS.map(({ label, href, icon: Icon, style }) => (
-            <Link key={label} href={href}>
-              <div className={`${style} rounded-xl p-4 text-center transition-colors cursor-pointer`}>
-                <Icon size={22} className="mx-auto" />
-                <p className="mt-2 text-xs font-semibold">{label}</p>
-              </div>
+      {/* Two-Column */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+
+        {/* Left: Recent Activity */}
+        <div className="lg:col-span-2 bg-white border border-gray-100 rounded-xl p-5">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-bold text-gray-900">Recent Activity</h2>
+          </div>
+          <div className="flex flex-col items-center justify-center py-12 text-center">
+            <div className="bg-blue-50 p-4 rounded-2xl mb-4">
+              <GraduationCap size={28} className="text-blue-400" />
+            </div>
+            <p className="text-sm font-semibold text-gray-700 mb-1">No activity yet</p>
+            <p className="text-xs text-gray-400 max-w-xs">
+              Student activity, lesson completions, and assignment submissions will appear here.
+            </p>
+            <Link
+              href="/teacher"
+              className="mt-4 inline-flex items-center gap-2 bg-indigo-600 text-white text-xs font-bold px-4 py-2.5 rounded-xl hover:bg-indigo-700 transition-colors"
+            >
+              Go to Classes <ArrowRight size={12} />
             </Link>
-          ))}
-        </div>
-      </div>
-
-      {/* CLASSES EMPTY STATE */}
-      <div>
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-base font-bold text-gray-800">My Classes</h2>
-          <Link href="/teacher" className="text-sm text-indigo-600 font-medium hover:underline flex items-center gap-1">
-            Manage <ArrowRight size={14} />
-          </Link>
-        </div>
-        <div className="bg-white border border-gray-100 rounded-xl p-8 text-center shadow-sm">
-          <div className="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <GraduationCap size={28} className="text-amber-600" />
           </div>
-          <h3 className="font-bold text-gray-800 text-base">No classes yet</h3>
-          <p className="text-sm text-gray-500 mt-1 max-w-xs mx-auto">
-            Create your first class to start assigning lessons and tracking student performance.
-          </p>
-          <Link
-            href="/teacher"
-            className="mt-5 inline-flex items-center gap-2 bg-amber-500 text-white text-sm font-semibold px-5 py-2.5 rounded-xl hover:bg-amber-600 transition-colors"
-          >
-            <PlusCircle size={15} /> Create Class
-          </Link>
         </div>
-      </div>
 
-      {/* RECENT LESSONS EMPTY STATE */}
-      <div>
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-base font-bold text-gray-800">Recent Lessons</h2>
-          <Link href="/teacher" className="text-sm text-indigo-600 font-medium hover:underline flex items-center gap-1">
-            All Lessons <ArrowRight size={14} />
-          </Link>
-        </div>
-        <div className="bg-white border border-gray-100 rounded-xl p-6 text-center shadow-sm">
-          <CheckCircle2 size={36} className="text-gray-300 mx-auto mb-2" />
-          <p className="text-sm text-gray-400">No lessons created yet. Create your first lesson above.</p>
-        </div>
-      </div>
+        {/* Right: Actions */}
+        <div className="space-y-4">
+          <div className="bg-white border border-gray-100 rounded-xl p-4">
+            <h2 className="text-sm font-bold text-gray-900 mb-3">Quick Actions</h2>
+            <div className="space-y-1">
+              {QUICK_ACTIONS.map(({ label, href, Icon, cls }) => (
+                <Link key={label} href={href}>
+                  <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 transition-colors group">
+                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 ${cls}`}>
+                      <Icon size={13} />
+                    </div>
+                    <span className="text-sm text-gray-600 group-hover:text-gray-900">{label}</span>
+                    <ChevronRight size={13} className="ml-auto text-gray-300 group-hover:text-gray-400" />
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
 
-      {/* INFO CARDS */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-5">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="bg-indigo-100 p-2 rounded-lg"><BarChart2 size={18} className="text-indigo-600" /></div>
-            <h3 className="font-semibold text-gray-800 text-sm">Student Analytics</h3>
+          {/* Tips */}
+          <div className="bg-emerald-600 rounded-xl p-4 text-white">
+            <div className="flex items-center gap-2 mb-1.5">
+              <BookMarked size={14} className="text-emerald-200" />
+              <span className="text-sm font-bold">Teach Smarter</span>
+            </div>
+            <p className="text-xs text-emerald-200 mb-3 leading-relaxed">
+              Use the AI-powered lesson builder to create interactive lessons in minutes.
+            </p>
+            <button className="inline-flex items-center gap-1.5 bg-white text-emerald-700 text-xs font-bold px-3 py-2 rounded-lg hover:bg-emerald-50 transition-colors">
+              Build Lesson <ArrowRight size={12} />
+            </button>
           </div>
-          <p className="text-xs text-gray-500">
-            See detailed performance analytics once students complete lessons.
-          </p>
-        </div>
-        <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-5">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="bg-emerald-100 p-2 rounded-lg"><Clock size={18} className="text-emerald-600" /></div>
-            <h3 className="font-semibold text-gray-800 text-sm">Study Time Tracking</h3>
-          </div>
-          <p className="text-xs text-gray-500">
-            Track how much time students spend on each lesson and subject.
-          </p>
         </div>
       </div>
 

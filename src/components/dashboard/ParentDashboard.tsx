@@ -2,17 +2,26 @@
 
 import Link from "next/link";
 import {
-  Users, BookOpen, Clock, Trophy, Bell, AlertCircle,
-  Plus, ChevronRight, TrendingUp, MessageSquare, ArrowRight,
-  UserPlus, BarChart2, Shield, CheckCircle2,
+  Users, BookOpen, CreditCard, Bell, BarChart2,
+  MessageSquare, Settings, ChevronRight, ArrowRight,
+  GraduationCap, ShieldCheck,
 } from "lucide-react";
 import { useAuth } from "@/store/auth-store";
 
 const QUICK_LINKS = [
-  { label: "Add Child",          href: "/parent",           icon: UserPlus,      style: "bg-indigo-600 text-white hover:bg-indigo-700"  },
-  { label: "View Reports",       href: "/parent",           icon: BarChart2,     style: "bg-emerald-600 text-white hover:bg-emerald-700" },
-  { label: "Parental Controls",  href: "/parent",           icon: Shield,        style: "bg-amber-500  text-white hover:bg-amber-600"   },
-  { label: "Messages",           href: "/parent",           icon: MessageSquare, style: "bg-violet-600 text-white hover:bg-violet-700"  },
+  { label: "Child Progress",      href: "/parent",  Icon: BarChart2,    cls: "text-indigo-600 bg-indigo-50"   },
+  { label: "Lessons & Subjects",  href: "/parent",  Icon: BookOpen,     cls: "text-blue-600   bg-blue-50"     },
+  { label: "Subscription & Billing", href: "/pricing", Icon: CreditCard, cls: "text-emerald-600 bg-emerald-50" },
+  { label: "Notifications",       href: "/parent",  Icon: Bell,         cls: "text-amber-600  bg-amber-50"    },
+  { label: "Messages",            href: "/parent",  Icon: MessageSquare, cls: "text-rose-600  bg-rose-50"     },
+  { label: "Account Settings",    href: "/parent",  Icon: Settings,     cls: "text-gray-600   bg-gray-100"    },
+];
+
+const STATS = [
+  { label: "Children",        value: "—",     Icon: Users,          ring: "ring-indigo-100", ico: "text-indigo-500",  bg: "bg-indigo-50"  },
+  { label: "Lessons Done",    value: "—",     Icon: BookOpen,       ring: "ring-blue-100",   ico: "text-blue-500",    bg: "bg-blue-50"    },
+  { label: "Plan",            value: "Free",  Icon: ShieldCheck,    ring: "ring-emerald-100",ico: "text-emerald-500", bg: "bg-emerald-50" },
+  { label: "Alerts",          value: "—",     Icon: Bell,           ring: "ring-amber-100",  ico: "text-amber-500",   bg: "bg-amber-50"   },
 ];
 
 export default function ParentDashboard() {
@@ -20,119 +29,97 @@ export default function ParentDashboard() {
   const firstName = user?.fullName?.split(" ")[0] ?? "Parent";
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto">
+    <div className="w-full space-y-5">
 
-      {/* HEADER */}
-      <div className="bg-gradient-to-r from-emerald-600 to-teal-600 rounded-2xl p-6 text-white">
-        <p className="text-emerald-200 text-sm font-medium">Welcome back</p>
-        <h1 className="text-2xl font-bold mt-0.5">{firstName}</h1>
-        <p className="text-emerald-200 text-sm mt-1">
-          Monitor your children's learning progress and set parental controls.
-        </p>
-        <div className="mt-4">
-          <Link
-            href="/parent"
-            className="inline-flex items-center gap-2 bg-white text-emerald-700 font-semibold text-sm px-4 py-2 rounded-xl hover:bg-emerald-50 transition-colors"
-          >
-            <Plus size={14} /> Add Child Account
-          </Link>
+      {/* Welcome */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div>
+          <h1 className="text-xl font-bold text-gray-900">Welcome, {firstName}!</h1>
+          <p className="text-sm text-gray-500 mt-0.5">Monitor your child's progress and manage their account.</p>
         </div>
+        <Link
+          href="/pricing"
+          className="inline-flex items-center gap-2 bg-indigo-600 text-white text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-indigo-700 transition-colors self-start sm:self-auto"
+        >
+          <ShieldCheck size={14} /> Upgrade Plan
+        </Link>
       </div>
 
-      {/* STAT CARDS */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {[
-          { label: "Children",       value: "—",  icon: Users,   color: "text-indigo-600",  bg: "bg-indigo-50"  },
-          { label: "Lessons Today",  value: "—",  icon: BookOpen,color: "text-emerald-600", bg: "bg-emerald-50" },
-          { label: "Study Time",     value: "—",  icon: Clock,   color: "text-amber-600",   bg: "bg-amber-50"   },
-          { label: "Badges Earned",  value: "—",  icon: Trophy,  color: "text-violet-600",  bg: "bg-violet-50"  },
-        ].map(({ label, value, icon: Icon, color, bg }) => (
-          <div key={label} className="bg-white border border-gray-100 rounded-xl p-4 flex items-center gap-3 shadow-sm">
-            <div className={`${bg} p-2 rounded-lg`}><Icon size={18} className={color} /></div>
-            <div>
-              <p className="text-xs text-gray-500 font-medium">{label}</p>
-              <p className="text-lg font-bold text-gray-800">{value}</p>
+      {/* Stats */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {STATS.map(({ label, value, Icon, ring, ico, bg }) => (
+          <div key={label} className={`bg-white rounded-xl border border-gray-100 ring-1 ${ring} p-4 flex items-center gap-3`}>
+            <div className={`${bg} p-2.5 rounded-xl flex-shrink-0`}>
+              <Icon size={18} className={ico} />
+            </div>
+            <div className="min-w-0">
+              <p className="text-xs text-gray-400 font-medium truncate">{label}</p>
+              <p className="text-base font-bold text-gray-900 truncate">{value}</p>
             </div>
           </div>
         ))}
       </div>
 
-      {/* QUICK ACTIONS */}
-      <div>
-        <h2 className="text-base font-bold text-gray-800 mb-3">Quick Actions</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {QUICK_LINKS.map(({ label, href, icon: Icon, style }) => (
-            <Link key={label} href={href}>
-              <div className={`${style} rounded-xl p-4 text-center transition-colors cursor-pointer`}>
-                <Icon size={22} className="mx-auto" />
-                <p className="mt-2 text-xs font-semibold">{label}</p>
-              </div>
+      {/* Two-Column */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+
+        {/* Left: Children Overview */}
+        <div className="lg:col-span-2 bg-white border border-gray-100 rounded-xl p-5">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-bold text-gray-900">Children</h2>
+          </div>
+          <div className="flex flex-col items-center justify-center py-12 text-center">
+            <div className="bg-indigo-50 p-4 rounded-2xl mb-4">
+              <GraduationCap size={28} className="text-indigo-400" />
+            </div>
+            <p className="text-sm font-semibold text-gray-700 mb-1">No children added yet</p>
+            <p className="text-xs text-gray-400 max-w-xs">
+              Subscribe to a plan to link a student account and start tracking progress.
+            </p>
+            <Link
+              href="/pricing"
+              className="mt-4 inline-flex items-center gap-2 bg-indigo-600 text-white text-xs font-bold px-4 py-2.5 rounded-xl hover:bg-indigo-700 transition-colors"
+            >
+              View Plans <ArrowRight size={12} />
             </Link>
-          ))}
-        </div>
-      </div>
-
-      {/* NO CHILDREN EMPTY STATE */}
-      <div className="bg-white border border-gray-100 rounded-xl p-8 text-center shadow-sm">
-        <div className="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-          <Users size={28} className="text-emerald-600" />
-        </div>
-        <h3 className="font-bold text-gray-800 text-base">No children added yet</h3>
-        <p className="text-sm text-gray-500 mt-1 max-w-xs mx-auto">
-          Add your child's account to start tracking their learning progress, set safe-browsing controls, and receive weekly reports.
-        </p>
-        <Link
-          href="/parent"
-          className="mt-5 inline-flex items-center gap-2 bg-emerald-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl hover:bg-emerald-700 transition-colors"
-        >
-          <UserPlus size={15} /> Add Child Account
-        </Link>
-      </div>
-
-      {/* ALERTS PANEL */}
-      <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <Bell size={16} className="text-amber-500" />
-            <h2 className="text-sm font-bold text-gray-800">Alerts &amp; Notifications</h2>
           </div>
         </div>
-        <div className="flex flex-col items-center justify-center py-6 text-center">
-          <CheckCircle2 size={32} className="text-gray-300 mb-2" />
-          <p className="text-sm text-gray-400">No alerts right now. You're all caught up!</p>
-        </div>
-      </div>
 
-      {/* INFO CARDS */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-5">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="bg-indigo-100 p-2 rounded-lg">
-              <TrendingUp size={18} className="text-indigo-600" />
+        {/* Right: Quick Links */}
+        <div className="space-y-4">
+          <div className="bg-white border border-gray-100 rounded-xl p-4">
+            <h2 className="text-sm font-bold text-gray-900 mb-3">Quick Links</h2>
+            <div className="space-y-1">
+              {QUICK_LINKS.map(({ label, href, Icon, cls }) => (
+                <Link key={label} href={href}>
+                  <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 transition-colors group">
+                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 ${cls}`}>
+                      <Icon size={13} />
+                    </div>
+                    <span className="text-sm text-gray-600 group-hover:text-gray-900">{label}</span>
+                    <ChevronRight size={13} className="ml-auto text-gray-300 group-hover:text-gray-400" />
+                  </div>
+                </Link>
+              ))}
             </div>
-            <h3 className="font-semibold text-gray-800 text-sm">Progress Reports</h3>
           </div>
-          <p className="text-xs text-gray-500">
-            Weekly progress reports will appear here once your child starts learning.
-          </p>
-          <Link href="/parent" className="mt-3 inline-flex items-center gap-1 text-xs text-indigo-600 font-semibold hover:underline">
-            Learn more <ArrowRight size={12} />
-          </Link>
-        </div>
 
-        <div className="bg-amber-50 border border-amber-100 rounded-xl p-5">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="bg-amber-100 p-2 rounded-lg">
-              <AlertCircle size={18} className="text-amber-600" />
+          {/* Info card */}
+          <div className="bg-indigo-600 rounded-xl p-4 text-white">
+            <div className="flex items-center gap-2 mb-1.5">
+              <ShieldCheck size={14} className="text-indigo-200" />
+              <span className="text-sm font-bold">EduJoyKids Premium</span>
             </div>
-            <h3 className="font-semibold text-gray-800 text-sm">Safe Learning</h3>
+            <p className="text-xs text-indigo-200 mb-3 leading-relaxed">
+              Unlock full access to all subjects, AI tutoring, and detailed progress reports.
+            </p>
+            <Link
+              href="/pricing"
+              className="inline-flex items-center gap-1.5 bg-white text-indigo-700 text-xs font-bold px-3 py-2 rounded-lg hover:bg-indigo-50 transition-colors"
+            >
+              See Plans <ArrowRight size={12} />
+            </Link>
           </div>
-          <p className="text-xs text-gray-500">
-            Configure content filters, time limits, and approved subjects for your child's account.
-          </p>
-          <Link href="/parent" className="mt-3 inline-flex items-center gap-1 text-xs text-amber-600 font-semibold hover:underline">
-            Configure <ArrowRight size={12} />
-          </Link>
         </div>
       </div>
 

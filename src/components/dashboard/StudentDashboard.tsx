@@ -3,222 +3,200 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
-  BookOpen, Trophy, Zap, Flame, Star, Play, ChevronRight,
+  BookOpen, Trophy, Zap, Flame, Star, Play,
   TrendingUp, Coins, Sparkles, Calculator, Microscope,
-  PenLine, Moon, Globe, CheckCircle, ArrowRight,
+  PenLine, Moon, Globe, ArrowRight, ChevronRight,
 } from "lucide-react";
 import { useAuth } from "@/store/auth-store";
 import { useGame } from "@/store/game-store";
 
 const SUBJECTS = [
-  { id: "english",  label: "English",        icon: BookOpen,    color: "bg-blue-500",    light: "bg-blue-50 text-blue-700"      },
-  { id: "math",     label: "Mathematics",    icon: Calculator,  color: "bg-violet-500",  light: "bg-violet-50 text-violet-700"  },
-  { id: "science",  label: "Science",        icon: Microscope,  color: "bg-emerald-500", light: "bg-emerald-50 text-emerald-700"},
-  { id: "urdu",     label: "Urdu",           icon: PenLine,     color: "bg-rose-500",    light: "bg-rose-50 text-rose-700"      },
-  { id: "islamiat", label: "Islamiat",       icon: Moon,        color: "bg-amber-500",   light: "bg-amber-50 text-amber-700"    },
-  { id: "social",   label: "Social Studies", icon: Globe,       color: "bg-teal-500",    light: "bg-teal-50 text-teal-700"      },
-];
-
-const QUICK_ACTIONS = [
-  { label: "Continue Learning", href: "/student/learn",        icon: Play,       style: "bg-indigo-600 text-white hover:bg-indigo-700"  },
-  { label: "AI Tutor",          href: "/student/ai-tutor",     icon: Sparkles,   style: "bg-violet-600 text-white hover:bg-violet-700"  },
-  { label: "Achievements",      href: "/student/achievements", icon: Trophy,     style: "bg-amber-500  text-white hover:bg-amber-600"   },
-  { label: "View Progress",     href: "/student/learn",        icon: TrendingUp, style: "bg-emerald-600 text-white hover:bg-emerald-700" },
+  { id: "english",  label: "English",        Icon: BookOpen,    bg: "bg-blue-500"    },
+  { id: "math",     label: "Mathematics",    Icon: Calculator,  bg: "bg-violet-500"  },
+  { id: "science",  label: "Science",        Icon: Microscope,  bg: "bg-emerald-500" },
+  { id: "urdu",     label: "Urdu",           Icon: PenLine,     bg: "bg-rose-500"    },
+  { id: "islamiat", label: "Islamiat",       Icon: Moon,        bg: "bg-amber-500"   },
+  { id: "social",   label: "Social Studies", Icon: Globe,       bg: "bg-teal-500"    },
 ];
 
 export default function StudentDashboard() {
   const { user, student } = useAuth() as any;
   const {
-    totalXP = 0, currentLevel = 1, xpToNextLevel = 100,
+    totalXP = 0, currentLevel = 1, xpToNextLevel = 200,
     coins = 0, streaks = { current: 0 },
   } = (useGame() as any) ?? {};
-  const [greeting, setGreeting] = useState("Good morning");
 
+  const [greeting, setGreeting] = useState("Good morning");
   useEffect(() => {
     const h = new Date().getHours();
     setGreeting(h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening");
   }, []);
 
-  const xpInLevel = totalXP % (xpToNextLevel || 100);
-  const xpPercent = xpToNextLevel > 0 ? Math.min(100, Math.round((xpInLevel / xpToNextLevel) * 100)) : 0;
-  const firstName  = (user?.fullName?.split(" ")[0]) ?? "Student";
+  const firstName  = user?.fullName?.split(" ")[0] ?? "Student";
   const grade      = student?.grade ?? null;
-
-  const stats = [
-    { label: "Total XP",   value: totalXP.toLocaleString(), icon: Zap,    color: "text-amber-600",  bg: "bg-amber-50"  },
-    { label: "Coins",      value: coins.toLocaleString(),   icon: Coins,  color: "text-yellow-600", bg: "bg-yellow-50" },
-    { label: "Day Streak", value: `${streaks.current}d`,   icon: Flame,  color: "text-rose-600",   bg: "bg-rose-50"   },
-    { label: "Level",      value: String(currentLevel),    icon: Trophy, color: "text-violet-600", bg: "bg-violet-50" },
-  ];
+  const safeXpNext = Math.max(xpToNextLevel, 1);
+  const xpInLevel  = totalXP % safeXpNext;
+  const xpPct      = Math.min(100, Math.round((xpInLevel / safeXpNext) * 100));
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto">
+    <div className="w-full space-y-5">
 
-      {/* HEADER */}
-      <div className="bg-gradient-to-r from-indigo-600 to-violet-600 rounded-2xl p-6 text-white">
-        <p className="text-indigo-200 text-sm font-medium">{greeting}</p>
-        <h1 className="text-2xl font-bold mt-0.5">
-          {firstName}{grade ? ` · ${grade}` : ""}
-        </h1>
-        <p className="text-indigo-200 text-sm mt-1">
-          You have earned{" "}
-          <span className="text-white font-semibold">{totalXP.toLocaleString()} XP</span>
-          {" "}&mdash; keep going!
-        </p>
-        <div className="mt-4 flex flex-wrap gap-2">
-          <Link
-            href="/student/learn"
-            className="inline-flex items-center gap-2 bg-white text-indigo-700 font-semibold text-sm px-4 py-2 rounded-xl hover:bg-indigo-50 transition-colors"
-          >
-            <Play size={14} /> Continue Learning
-          </Link>
-          <Link
-            href="/student/ai-tutor"
-            className="inline-flex items-center gap-2 bg-white/20 text-white font-semibold text-sm px-4 py-2 rounded-xl hover:bg-white/30 transition-colors"
-          >
-            <Sparkles size={14} /> Ask AI Tutor
-          </Link>
+      {/* Welcome */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div>
+          <h1 className="text-xl font-bold text-gray-900">
+            {greeting}, {firstName}
+            {grade ? <span className="ml-1 text-base font-normal text-gray-400">· {grade}</span> : ""}!
+          </h1>
+          <p className="text-sm text-gray-500 mt-0.5">Ready to continue your learning journey?</p>
         </div>
+        <Link
+          href="/student/learn"
+          className="inline-flex items-center gap-2 bg-indigo-600 text-white text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-indigo-700 transition-colors self-start sm:self-auto"
+        >
+          <Play size={14} /> Continue Learning
+        </Link>
       </div>
 
-      {/* STATS */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {stats.map(({ label, value, icon: Icon, color, bg }) => (
-          <div
-            key={label}
-            className="bg-white border border-gray-100 rounded-xl p-4 flex items-center gap-3 shadow-sm"
-          >
-            <div className={`${bg} p-2 rounded-lg`}>
-              <Icon size={18} className={color} />
+      {/* Stats */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {[
+          { label: "Total XP",  value: totalXP.toLocaleString(),  Icon: Zap,    bg: "bg-amber-50",  ico: "text-amber-500",   ring: "ring-amber-100"  },
+          { label: "Coins",     value: coins.toLocaleString(),     Icon: Coins,  bg: "bg-yellow-50", ico: "text-yellow-500",  ring: "ring-yellow-100" },
+          { label: "Streak",    value: `${streaks.current} days`,  Icon: Flame,  bg: "bg-rose-50",   ico: "text-rose-500",    ring: "ring-rose-100"   },
+          { label: "Level",     value: `Level ${currentLevel}`,   Icon: Trophy, bg: "bg-violet-50", ico: "text-violet-500",  ring: "ring-violet-100" },
+        ].map(({ label, value, Icon, bg, ico, ring }) => (
+          <div key={label} className={`bg-white rounded-xl border border-gray-100 ring-1 ${ring} p-4 flex items-center gap-3`}>
+            <div className={`${bg} p-2.5 rounded-xl flex-shrink-0`}>
+              <Icon size={18} className={ico} />
             </div>
-            <div>
-              <p className="text-xs text-gray-500 font-medium">{label}</p>
-              <p className="text-lg font-bold text-gray-800">{value}</p>
+            <div className="min-w-0">
+              <p className="text-xs text-gray-400 font-medium truncate">{label}</p>
+              <p className="text-base font-bold text-gray-900 truncate">{value}</p>
             </div>
           </div>
         ))}
       </div>
 
-      {/* XP PROGRESS */}
-      <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
-            <Star size={16} className="text-amber-500 fill-amber-400" />
-            <span className="font-semibold text-gray-800 text-sm">
-              Level {currentLevel} Progress
-            </span>
+      {/* XP Bar */}
+      <div className="bg-white border border-gray-100 rounded-xl p-4 flex items-center gap-4">
+        <Star size={15} className="text-amber-400 fill-amber-400 flex-shrink-0" />
+        <div className="flex-1 min-w-0">
+          <div className="flex justify-between text-xs text-gray-500 mb-1.5">
+            <span className="font-semibold text-gray-700">Level {currentLevel}</span>
+            <span>{xpInLevel.toLocaleString()} / {xpToNextLevel.toLocaleString()} XP</span>
           </div>
-          <span className="text-sm text-gray-500">
-            {xpInLevel.toLocaleString()} / {xpToNextLevel.toLocaleString()} XP
-          </span>
+          <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-gradient-to-r from-indigo-500 to-violet-500 rounded-full transition-all duration-500"
+              style={{ width: `${xpPct}%` }}
+            />
+          </div>
         </div>
-        <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
-          <div
-            className="h-full bg-gradient-to-r from-indigo-500 to-violet-500 rounded-full transition-all duration-700"
-            style={{ width: `${xpPercent}%` }}
-          />
-        </div>
-        <p className="text-xs text-gray-400 mt-2">
-          {xpToNextLevel - xpInLevel} XP until Level {currentLevel + 1}
-        </p>
+        <span className="text-xs text-gray-400 flex-shrink-0 hidden sm:block">{xpToNextLevel - xpInLevel} XP to go</span>
       </div>
 
-      {/* SUBJECTS */}
-      <div>
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-base font-bold text-gray-800">My Subjects</h2>
-          <Link
-            href="/student/learn"
-            className="text-sm text-indigo-600 font-medium hover:underline flex items-center gap-1"
-          >
-            All Subjects <ArrowRight size={14} />
-          </Link>
-        </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-          {SUBJECTS.map(({ id, label, icon: Icon, color, light }) => (
-            <Link key={id} href="/student/learn">
-              <div className="bg-white border border-gray-100 rounded-xl p-4 hover:shadow-md hover:border-indigo-200 transition-all cursor-pointer">
-                <div className={`w-10 h-10 ${color} rounded-lg flex items-center justify-center mb-3`}>
-                  <Icon size={20} className="text-white" />
+      {/* Two-Column Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+
+        {/* Subjects — left 2/3 */}
+        <div className="lg:col-span-2 bg-white border border-gray-100 rounded-xl p-5">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-bold text-gray-900">My Subjects</h2>
+            <Link href="/student/learn" className="text-xs text-indigo-600 font-semibold hover:underline flex items-center gap-1">
+              View all <ArrowRight size={12} />
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            {SUBJECTS.map(({ id, label, Icon, bg }) => (
+              <Link key={id} href="/student/learn">
+                <div className="flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:border-indigo-200 hover:bg-indigo-50 transition-all group cursor-pointer">
+                  <div className={`${bg} w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0`}>
+                    <Icon size={14} className="text-white" />
+                  </div>
+                  <span className="text-sm font-medium text-gray-700 group-hover:text-indigo-700 truncate">{label}</span>
                 </div>
-                <p className="font-semibold text-gray-800 text-sm">{label}</p>
-                <span className={`mt-2 inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full ${light}`}>
-                  <Play size={9} /> Begin
-                </span>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* QUICK ACTIONS */}
-      <div>
-        <h2 className="text-base font-bold text-gray-800 mb-3">Quick Actions</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {QUICK_ACTIONS.map(({ label, href, icon: Icon, style }) => (
-            <Link key={label} href={href}>
-              <div className={`${style} rounded-xl p-4 text-center transition-colors cursor-pointer`}>
-                <Icon size={22} className="mx-auto" />
-                <p className="mt-2 text-xs font-semibold">{label}</p>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
+        {/* Right panel — 1/3 */}
+        <div className="space-y-4">
 
-      {/* GETTING STARTED */}
-      {totalXP === 0 && (
-        <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-6 text-center">
-          <CheckCircle size={40} className="text-indigo-400 mx-auto mb-3" />
-          <h3 className="font-bold text-gray-800 text-base">Ready to start your journey?</h3>
-          <p className="text-sm text-gray-500 mt-1">
-            Pick a subject above or ask the AI Tutor — your progress will appear here.
-          </p>
-          <Link
-            href="/student/learn"
-            className="mt-4 inline-flex items-center gap-2 bg-indigo-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl hover:bg-indigo-700 transition-colors"
-          >
-            <BookOpen size={15} /> Start Learning
-          </Link>
-        </div>
-      )}
-
-      {/* STREAK BANNER */}
-      {streaks.current > 0 && (
-        <div className="bg-gradient-to-r from-rose-500 to-orange-500 rounded-xl p-4 flex items-center justify-between text-white">
-          <div className="flex items-center gap-3">
-            <Flame size={28} />
-            <div>
-              <p className="font-bold">{streaks.current}-Day Learning Streak!</p>
-              <p className="text-sm text-rose-100">Come back tomorrow to keep it going.</p>
+          {/* Quick Actions */}
+          <div className="bg-white border border-gray-100 rounded-xl p-4">
+            <h2 className="text-sm font-bold text-gray-900 mb-3">Quick Actions</h2>
+            <div className="space-y-1">
+              {[
+                { label: "Continue Learning", href: "/student/learn",        Icon: Play,       cls: "text-indigo-600 bg-indigo-50"   },
+                { label: "Ask AI Tutor",      href: "/student/ai-tutor",     Icon: Sparkles,   cls: "text-violet-600 bg-violet-50"   },
+                { label: "Achievements",      href: "/student/achievements", Icon: Trophy,     cls: "text-amber-600  bg-amber-50"    },
+                { label: "My Progress",       href: "/student/learn",        Icon: TrendingUp, cls: "text-emerald-600 bg-emerald-50" },
+              ].map(({ label, href, Icon, cls }) => (
+                <Link key={label} href={href}>
+                  <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 transition-colors group">
+                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 ${cls}`}>
+                      <Icon size={13} />
+                    </div>
+                    <span className="text-sm text-gray-600 group-hover:text-gray-900">{label}</span>
+                    <ChevronRight size={13} className="ml-auto text-gray-300 group-hover:text-gray-400" />
+                  </div>
+                </Link>
+              ))}
             </div>
           </div>
-          <Link href="/student/achievements">
-            <span className="text-xs font-semibold bg-white/20 px-3 py-1.5 rounded-lg hover:bg-white/30 transition-colors cursor-pointer flex items-center gap-1">
-              View <ChevronRight size={13} />
-            </span>
+
+          {/* AI Tutor */}
+          <div className="bg-violet-600 rounded-xl p-4 text-white">
+            <div className="flex items-center gap-2 mb-1.5">
+              <Sparkles size={14} className="text-violet-200" />
+              <span className="text-sm font-bold">AI Tutor</span>
+            </div>
+            <p className="text-xs text-violet-200 mb-3 leading-relaxed">
+              Stuck on a topic? Get instant, clear explanations 24/7.
+            </p>
+            <Link
+              href="/student/ai-tutor"
+              className="inline-flex items-center gap-1.5 bg-white text-violet-700 text-xs font-bold px-3 py-2 rounded-lg hover:bg-violet-50 transition-colors"
+            >
+              Ask Now <ArrowRight size={12} />
+            </Link>
+          </div>
+
+          {/* Streak badge (only when active) */}
+          {streaks.current > 0 && (
+            <div className="bg-rose-50 border border-rose-100 rounded-xl p-4 flex items-center gap-3">
+              <div className="bg-rose-100 p-2.5 rounded-xl flex-shrink-0">
+                <Flame size={16} className="text-rose-500" />
+              </div>
+              <div>
+                <p className="text-sm font-bold text-gray-800">{streaks.current}-Day Streak!</p>
+                <p className="text-xs text-gray-500">Keep logging in daily.</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Getting Started (zero XP) */}
+      {totalXP === 0 && (
+        <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+          <div className="bg-indigo-100 p-3 rounded-xl flex-shrink-0">
+            <BookOpen size={20} className="text-indigo-600" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="font-bold text-gray-900">Start your learning journey</p>
+            <p className="text-sm text-gray-500 mt-0.5">Choose a subject and complete your first lesson to earn XP and coins.</p>
+          </div>
+          <Link
+            href="/student/learn"
+            className="inline-flex items-center gap-2 bg-indigo-600 text-white text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-indigo-700 transition-colors flex-shrink-0"
+          >
+            Start Learning <ArrowRight size={13} />
           </Link>
         </div>
       )}
-
-      {/* AI TUTOR PROMO */}
-      <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm flex items-center gap-4">
-        <div className="bg-violet-100 p-3 rounded-xl flex-shrink-0">
-          <Sparkles size={24} className="text-violet-600" />
-        </div>
-        <div className="flex-1 min-w-0">
-          <p className="font-semibold text-gray-800 text-sm">Need help with a topic?</p>
-          <p className="text-xs text-gray-500 mt-0.5">
-            Your AI Tutor is available 24/7 — ask any question!
-          </p>
-        </div>
-        <Link
-          href="/student/ai-tutor"
-          className="flex-shrink-0 bg-violet-600 text-white text-xs font-semibold px-3 py-2 rounded-xl hover:bg-violet-700 transition-colors flex items-center gap-1"
-        >
-          Ask Now <ArrowRight size={12} />
-        </Link>
-      </div>
 
     </div>
   );
