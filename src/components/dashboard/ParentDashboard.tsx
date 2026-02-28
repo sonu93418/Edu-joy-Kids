@@ -1,413 +1,141 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
 import Link from "next/link";
 import {
-  Users,
-  TrendingUp,
-  Shield,
-  Clock,
-  Star,
-  ChevronRight,
-  BookOpen,
-  Target,
-  Award,
-  AlertCircle,
-  Plus,
-  Settings,
-  Zap,
-  Flame,
-  Trophy,
-  Lightbulb,
-  AlertTriangle,
-  UserPlus,
-  CreditCard,
-  BarChart2,
-  Sparkles,
-  CheckCircle,
+  Users, BookOpen, Clock, Trophy, Bell, AlertCircle,
+  Plus, ChevronRight, TrendingUp, MessageSquare, ArrowRight,
+  UserPlus, BarChart2, Shield, CheckCircle2,
 } from "lucide-react";
 import { useAuth } from "@/store/auth-store";
 
-const CHILDREN = [
-  {
-    id: "1",
-    name: "Ali Ahmed",
-    grade: "Class 3",
-    level: 8,
-    xp: 3200,
-    streak: 7,
-    lastActive: "2 hours ago",
-    subjects: [
-      { name: "English", progress: 72, color: "bg-blue-400" },
-      { name: "Math", progress: 58, color: "bg-purple-400" },
-      { name: "Science", progress: 85, color: "bg-green-400" },
-    ],
-    weeklyTime: 340, // minutes
-    weeklyGoal: 420,
-    status: "active",
-  },
-  {
-    id: "2",
-    name: "Sara Ahmed",
-    grade: "Play Group",
-    level: 3,
-    xp: 850,
-    streak: 3,
-    lastActive: "Yesterday",
-    subjects: [
-      { name: "English", progress: 45, color: "bg-blue-400" },
-      { name: "Math", progress: 30, color: "bg-purple-400" },
-    ],
-    weeklyTime: 120,
-    weeklyGoal: 180,
-    status: "needs_attention",
-  },
+const QUICK_LINKS = [
+  { label: "Add Child",          href: "/parent",           icon: UserPlus,      style: "bg-indigo-600 text-white hover:bg-indigo-700"  },
+  { label: "View Reports",       href: "/parent",           icon: BarChart2,     style: "bg-emerald-600 text-white hover:bg-emerald-700" },
+  { label: "Parental Controls",  href: "/parent",           icon: Shield,        style: "bg-amber-500  text-white hover:bg-amber-600"   },
+  { label: "Messages",           href: "/parent",           icon: MessageSquare, style: "bg-violet-600 text-white hover:bg-violet-700"  },
 ];
-
-const ALERTS = [
-  {
-    id: 1,
-    type: "warning",
-    child: "Ali Ahmed",
-    message: "Screen time limit reached (2 hrs)",
-    Icon: Clock,
-  },
-  {
-    id: 2,
-    type: "success",
-    child: "Ali Ahmed",
-    message: "Completed all daily missions!",
-    Icon: CheckCircle,
-  },
-  {
-    id: 3,
-    type: "info",
-    child: "Sara Ahmed",
-    message: "Hasn't practiced in 2 days",
-    Icon: Lightbulb,
-  },
-];
-
-const AI_INSIGHTS = [
-  {
-    child: "Ali Ahmed",
-    insight:
-      "Ali struggles with fractions. Recommend 15 min of fraction practice daily.",
-    action: "Assign Practice",
-    priority: "high",
-  },
-  {
-    child: "Sara Ahmed",
-    insight:
-      "Sara learns best with visual activities. Coloring & matching games work great!",
-    action: "View Plan",
-    priority: "medium",
-  },
-];
-
-const container = {
-  hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.08 } },
-};
-const item = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } };
 
 export default function ParentDashboard() {
-  const { user } = useAuth();
-  const [activeChild, setActiveChild] = useState(CHILDREN[0]);
+  const { user } = useAuth() as any;
+  const firstName = user?.fullName?.split(" ")[0] ?? "Parent";
 
   return (
-    <motion.div
-      variants={container}
-      initial="hidden"
-      animate="show"
-      className="space-y-6 max-w-6xl mx-auto"
-    >
-      {/* Header */}
-      <motion.div variants={item}>
-        <h1 className="text-3xl font-black text-gray-800">
-          Welcome back, {user?.fullName?.split(" ")[0] ?? "there"}!
-        </h1>
-        <p className="text-gray-500 mt-1">
-          Here&apos;s how your children are doing today
+    <div className="space-y-6 max-w-5xl mx-auto">
+
+      {/* HEADER */}
+      <div className="bg-gradient-to-r from-emerald-600 to-teal-600 rounded-2xl p-6 text-white">
+        <p className="text-emerald-200 text-sm font-medium">Welcome back</p>
+        <h1 className="text-2xl font-bold mt-0.5">{firstName}</h1>
+        <p className="text-emerald-200 text-sm mt-1">
+          Monitor your children's learning progress and set parental controls.
         </p>
-      </motion.div>
-
-      {/* Quick Stats */}
-      <motion.div
-        variants={item}
-        className="grid grid-cols-2 md:grid-cols-4 gap-3"
-      >
-        {(() => {
-          const statIcons = [Users, BookOpen, Clock, Trophy];
-          return [
-            {
-              label: "Children",
-              value: "2",
-              color: "text-fun-blue",
-              bg: "bg-blue-50 border-blue-100",
-            },
-            {
-              label: "Lessons Today",
-              value: "5",
-              color: "text-fun-green",
-              bg: "bg-green-50 border-green-100",
-            },
-            {
-              label: "Learning Time",
-              value: "1.2 hrs",
-              color: "text-fun-purple",
-              bg: "bg-purple-50 border-purple-100",
-            },
-            {
-              label: "Badges Earned",
-              value: "12",
-              color: "text-fun-orange",
-              bg: "bg-orange-50 border-orange-100",
-            },
-          ].map((stat, i) => {
-            const StatIcon = statIcons[i];
-            return (
-              <div
-                key={i}
-                className={`rounded-2xl border-2 ${stat.bg} p-4 flex items-center gap-3`}
-              >
-                <StatIcon size={28} className={`${stat.color} flex-shrink-0`} />
-                <div>
-                  <p className="text-xs text-gray-500 font-medium">
-                    {stat.label}
-                  </p>
-                  <p className={`font-black text-lg ${stat.color}`}>
-                    {stat.value}
-                  </p>
-                </div>
-              </div>
-            );
-          });
-        })()}
-      </motion.div>
-
-      {/* Children Cards */}
-      <motion.div variants={item}>
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-lg font-black text-gray-800 flex items-center gap-2">
-            <Users size={20} className="text-edujoy-primary-500" /> My Children
-          </h2>
+        <div className="mt-4">
           <Link
-            href="/parent/children/add"
-            className="flex items-center gap-1 text-sm font-bold text-edujoy-primary-500 hover:underline"
+            href="/parent"
+            className="inline-flex items-center gap-2 bg-white text-emerald-700 font-semibold text-sm px-4 py-2 rounded-xl hover:bg-emerald-50 transition-colors"
           >
-            <Plus size={16} /> Add Child
+            <Plus size={14} /> Add Child Account
           </Link>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {CHILDREN.map((child) => (
-            <motion.div
-              key={child.id}
-              whileHover={{ y: -2 }}
-              className="card-fun p-5 cursor-pointer"
-              onClick={() => setActiveChild(child)}
-            >
-              {/* Child Header */}
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-fun-yellow to-fun-orange flex items-center justify-center text-2xl font-black text-white shadow-sm">
-                  {child.name.charAt(0)}
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2">
-                    <h3 className="font-black text-gray-800">{child.name}</h3>
-                    {child.status === "needs_attention" && (
-                      <span className="text-xs bg-yellow-100 text-yellow-600 font-bold px-2 py-0.5 rounded-full">
-                        Needs Attention
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-sm text-gray-500">{child.grade}</p>
-                  <div className="flex items-center gap-3 mt-1 text-xs font-bold">
-                    <span className="text-fun-orange flex items-center gap-1">
-                      <Zap size={10} /> Level {child.level}
-                    </span>
-                    <span className="text-fun-pink flex items-center gap-1">
-                      <Flame size={10} /> {child.streak}d
-                    </span>
-                    <span className="text-gray-400">• {child.lastActive}</span>
-                  </div>
-                </div>
-                <Link
-                  href={`/parent/children/${child.id}`}
-                  className="text-gray-300 hover:text-edujoy-primary-500 transition-colors"
-                >
-                  <ChevronRight size={20} />
-                </Link>
-              </div>
-
-              {/* Subject Progress */}
-              <div className="space-y-2 mb-3">
-                {child.subjects.map((sub) => (
-                  <div key={sub.name} className="flex items-center gap-2">
-                    <span className="text-xs text-gray-500 w-16 flex-shrink-0">
-                      {sub.name}
-                    </span>
-                    <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
-                      <motion.div
-                        className={`h-full rounded-full ${sub.color}`}
-                        initial={{ width: 0 }}
-                        animate={{ width: `${sub.progress}%` }}
-                        transition={{ duration: 0.8 }}
-                      />
-                    </div>
-                    <span className="text-xs font-bold text-gray-600 w-8 text-right">
-                      {sub.progress}%
-                    </span>
-                  </div>
-                ))}
-              </div>
-
-              {/* Weekly time */}
-              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
-                <div className="flex items-center gap-2">
-                  <Clock size={14} className="text-gray-400" />
-                  <span className="text-xs text-gray-500 font-medium">
-                    Weekly Learning
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-20 h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-gradient-to-r from-fun-green to-edujoy-primary-400 rounded-full"
-                      style={{
-                        width: `${Math.min(100, (child.weeklyTime / child.weeklyGoal) * 100)}%`,
-                      }}
-                    />
-                  </div>
-                  <span className="text-xs font-bold text-gray-600">
-                    {Math.round(child.weeklyTime / 60)}h/
-                    {Math.round(child.weeklyGoal / 60)}h
-                  </span>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </motion.div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* AI Insights */}
-        <motion.div variants={item} className="card-fun p-5">
-          <h2 className="text-lg font-black text-gray-800 flex items-center gap-2 mb-4">
-            <Sparkles size={20} className="text-fun-purple" /> AI Insights
-          </h2>
-          <div className="space-y-3">
-            {AI_INSIGHTS.map((insight, i) => (
-              <div
-                key={i}
-                className={`p-4 rounded-2xl border-2 ${insight.priority === "high" ? "border-orange-200 bg-orange-50" : "border-blue-100 bg-blue-50"}`}
-              >
-                <div className="flex items-start gap-2">
-                  <span className="text-xl mt-0.5">
-                    {insight.priority === "high" ? (
-                      <AlertTriangle size={20} className="text-orange-500" />
-                    ) : (
-                      <Lightbulb size={20} className="text-blue-500" />
-                    )}
-                  </span>
-                  <div className="flex-1">
-                    <p className="text-xs font-bold text-gray-500 mb-1">
-                      {insight.child}
-                    </p>
-                    <p className="text-sm text-gray-700 font-medium">
-                      {insight.insight}
-                    </p>
-                    <button
-                      className={`mt-2 text-xs font-black px-3 py-1 rounded-xl ${insight.priority === "high" ? "bg-orange-400 text-white" : "bg-blue-400 text-white"}`}
-                    >
-                      {insight.action}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Alerts & Notifications */}
-        <motion.div variants={item} className="card-fun p-5">
-          <h2 className="text-lg font-black text-gray-800 flex items-center gap-2 mb-4">
-            <AlertCircle size={20} className="text-fun-orange" /> Notifications
-          </h2>
-          <div className="space-y-3">
-            {ALERTS.map((alert) => (
-              <div
-                key={alert.id}
-                className={`flex items-start gap-3 p-3 rounded-xl ${
-                  alert.type === "warning"
-                    ? "bg-yellow-50 border border-yellow-200"
-                    : alert.type === "success"
-                      ? "bg-green-50 border border-green-200"
-                      : "bg-blue-50 border border-blue-200"
-                }`}
-              >
-                <alert.Icon
-                  size={24}
-                  className={`flex-shrink-0 ${alert.type === "warning" ? "text-yellow-600" : alert.type === "success" ? "text-green-600" : "text-blue-600"}`}
-                />
-                <div>
-                  <p className="text-xs font-bold text-gray-500">
-                    {alert.child}
-                  </p>
-                  <p className="text-sm font-medium text-gray-700">
-                    {alert.message}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </motion.div>
       </div>
 
-      {/* Quick Actions */}
-      <motion.div variants={item} className="card-fun p-5">
-        <h2 className="text-lg font-black text-gray-800 mb-4">Quick Actions</h2>
+      {/* STAT CARDS */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {[
+          { label: "Children",       value: "—",  icon: Users,   color: "text-indigo-600",  bg: "bg-indigo-50"  },
+          { label: "Lessons Today",  value: "—",  icon: BookOpen,color: "text-emerald-600", bg: "bg-emerald-50" },
+          { label: "Study Time",     value: "—",  icon: Clock,   color: "text-amber-600",   bg: "bg-amber-50"   },
+          { label: "Badges Earned",  value: "—",  icon: Trophy,  color: "text-violet-600",  bg: "bg-violet-50"  },
+        ].map(({ label, value, icon: Icon, color, bg }) => (
+          <div key={label} className="bg-white border border-gray-100 rounded-xl p-4 flex items-center gap-3 shadow-sm">
+            <div className={`${bg} p-2 rounded-lg`}><Icon size={18} className={color} /></div>
+            <div>
+              <p className="text-xs text-gray-500 font-medium">{label}</p>
+              <p className="text-lg font-bold text-gray-800">{value}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* QUICK ACTIONS */}
+      <div>
+        <h2 className="text-base font-bold text-gray-800 mb-3">Quick Actions</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {[
-            {
-              Icon: UserPlus,
-              label: "Add Child Profile",
-              href: "/parent/children/add",
-              color: "from-edujoy-primary-400 to-fun-purple",
-            },
-            {
-              Icon: Clock,
-              label: "Set Screen Time",
-              href: "/parent/safety",
-              color: "from-fun-blue to-blue-600",
-            },
-            {
-              Icon: BarChart2,
-              label: "View Reports",
-              href: "/parent/reports",
-              color: "from-fun-green to-green-600",
-            },
-            {
-              Icon: CreditCard,
-              label: "Manage Plan",
-              href: "/parent/subscription",
-              color: "from-fun-orange to-orange-600",
-            },
-          ].map((action, i) => (
-            <Link key={i} href={action.href}>
-              <motion.div
-                whileHover={{ y: -3, scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className={`bg-gradient-to-br ${action.color} rounded-2xl p-4 text-white text-center cursor-pointer shadow-sm`}
-              >
-                <action.Icon size={28} className="mx-auto" />
-                <p className="mt-2 text-xs font-black">{action.label}</p>
-              </motion.div>
+          {QUICK_LINKS.map(({ label, href, icon: Icon, style }) => (
+            <Link key={label} href={href}>
+              <div className={`${style} rounded-xl p-4 text-center transition-colors cursor-pointer`}>
+                <Icon size={22} className="mx-auto" />
+                <p className="mt-2 text-xs font-semibold">{label}</p>
+              </div>
             </Link>
           ))}
         </div>
-      </motion.div>
-    </motion.div>
+      </div>
+
+      {/* NO CHILDREN EMPTY STATE */}
+      <div className="bg-white border border-gray-100 rounded-xl p-8 text-center shadow-sm">
+        <div className="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+          <Users size={28} className="text-emerald-600" />
+        </div>
+        <h3 className="font-bold text-gray-800 text-base">No children added yet</h3>
+        <p className="text-sm text-gray-500 mt-1 max-w-xs mx-auto">
+          Add your child's account to start tracking their learning progress, set safe-browsing controls, and receive weekly reports.
+        </p>
+        <Link
+          href="/parent"
+          className="mt-5 inline-flex items-center gap-2 bg-emerald-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl hover:bg-emerald-700 transition-colors"
+        >
+          <UserPlus size={15} /> Add Child Account
+        </Link>
+      </div>
+
+      {/* ALERTS PANEL */}
+      <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <Bell size={16} className="text-amber-500" />
+            <h2 className="text-sm font-bold text-gray-800">Alerts &amp; Notifications</h2>
+          </div>
+        </div>
+        <div className="flex flex-col items-center justify-center py-6 text-center">
+          <CheckCircle2 size={32} className="text-gray-300 mb-2" />
+          <p className="text-sm text-gray-400">No alerts right now. You're all caught up!</p>
+        </div>
+      </div>
+
+      {/* INFO CARDS */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-5">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="bg-indigo-100 p-2 rounded-lg">
+              <TrendingUp size={18} className="text-indigo-600" />
+            </div>
+            <h3 className="font-semibold text-gray-800 text-sm">Progress Reports</h3>
+          </div>
+          <p className="text-xs text-gray-500">
+            Weekly progress reports will appear here once your child starts learning.
+          </p>
+          <Link href="/parent" className="mt-3 inline-flex items-center gap-1 text-xs text-indigo-600 font-semibold hover:underline">
+            Learn more <ArrowRight size={12} />
+          </Link>
+        </div>
+
+        <div className="bg-amber-50 border border-amber-100 rounded-xl p-5">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="bg-amber-100 p-2 rounded-lg">
+              <AlertCircle size={18} className="text-amber-600" />
+            </div>
+            <h3 className="font-semibold text-gray-800 text-sm">Safe Learning</h3>
+          </div>
+          <p className="text-xs text-gray-500">
+            Configure content filters, time limits, and approved subjects for your child's account.
+          </p>
+          <Link href="/parent" className="mt-3 inline-flex items-center gap-1 text-xs text-amber-600 font-semibold hover:underline">
+            Configure <ArrowRight size={12} />
+          </Link>
+        </div>
+      </div>
+
+    </div>
   );
 }
