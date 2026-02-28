@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -242,22 +241,16 @@ export default function SignupPage() {
           delay: number;
         }>
       ).map(({ node, left, top, delay }, i) => (
-        <motion.div
+        <div
           key={i}
-          className="absolute pointer-events-none select-none"
-          style={{ left, top }}
-          animate={{ y: [-8, 8, -8], rotate: [-5, 5, -5] }}
-          transition={{ duration: 3 + i * 0.5, repeat: Infinity, delay }}
+          className="absolute pointer-events-none select-none hero-float"
+          style={{ left, top, animationDelay: `${delay}s` }}
         >
           {node}
-        </motion.div>
+        </div>
       ))}
 
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md"
-      >
+      <div className="w-full max-w-md">
         {/* Logo */}
         <Link href="/" className="flex items-center justify-center gap-2 mb-6">
           <div className="w-12 h-12 rounded-full bg-gradient-to-br from-edujoy-primary-400 to-fun-purple flex items-center justify-center">
@@ -293,23 +286,13 @@ export default function SignupPage() {
         </div>
 
         <div className="card-fun p-8">
-          <AnimatePresence mode="wait">
+          <div>
             {step === 1 && (
-              <motion.div
-                key="step1"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 20 }}
-              >
+            <div>
                 <div className="text-center mb-6">
-                  <motion.div
-                    initial={{ scale: 0, rotate: -180 }}
-                    animate={{ scale: 1, rotate: 0 }}
-                    transition={{ type: "spring", stiffness: 200, damping: 14 }}
-                    className="w-14 h-14 mx-auto mb-3 rounded-2xl bg-gradient-to-br from-edujoy-primary-400 to-fun-purple flex items-center justify-center shadow-lg"
-                  >
+                  <div className="w-14 h-14 mx-auto mb-3 rounded-2xl bg-gradient-to-br from-edujoy-primary-400 to-fun-purple flex items-center justify-center shadow-lg">
                     <Rocket size={28} className="text-white" />
-                  </motion.div>
+                  </div>
                   <h1 className="text-2xl font-black text-gray-800">
                     Create Your Account
                   </h1>
@@ -415,34 +398,22 @@ export default function SignupPage() {
                   )}
                 </div>
 
-                <motion.button
+                <button
                   type="button"
                   onClick={nextStep}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
                   className="btn-fun w-full py-3 font-black flex items-center justify-center gap-2"
                 >
                   Continue <ArrowRight size={18} />
-                </motion.button>
-              </motion.div>
+                </button>
+              </div>
             )}
 
-            {step === 2 && (
-              <motion.div
-                key="step2"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-              >
+          {step === 2 && (
+            <div>
                 <div className="text-center mb-6">
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ type: "spring", stiffness: 200, damping: 14 }}
-                    className="w-14 h-14 mx-auto mb-3 rounded-2xl bg-gradient-to-br from-fun-purple to-fun-pink flex items-center justify-center shadow-lg"
-                  >
+                  <div className="w-14 h-14 mx-auto mb-3 rounded-2xl bg-gradient-to-br from-fun-purple to-fun-pink flex items-center justify-center shadow-lg">
                     <Lock size={28} className="text-white" />
-                  </motion.div>
+                  </div>
                   <h1 className="text-2xl font-black text-gray-800">
                     Secure Your Account
                   </h1>
@@ -536,11 +507,9 @@ export default function SignupPage() {
                     >
                       <ArrowLeft size={16} /> Back
                     </button>
-                    <motion.button
+                    <button
                       type="submit"
                       disabled={isLoading}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
                       className="flex-1 btn-fun py-3 font-black disabled:opacity-60 flex items-center justify-center gap-2"
                     >
                       {isLoading ? (
@@ -550,12 +519,12 @@ export default function SignupPage() {
                           <Sparkles size={16} /> Create Account
                         </span>
                       )}
-                    </motion.button>
+                    </button>
                   </div>
                 </form>
-              </motion.div>
+              </div>
             )}
-          </AnimatePresence>
+          </div>
 
           <p className="text-center text-gray-500 text-sm mt-4">
             Already have an account?{" "}
@@ -567,7 +536,7 @@ export default function SignupPage() {
             </Link>
           </p>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }

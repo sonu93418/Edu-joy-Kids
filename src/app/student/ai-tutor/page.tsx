@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import {
   Send,
   Sparkles,
@@ -133,13 +132,9 @@ export default function AITutorPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-4 flex-shrink-0">
           <div className="flex items-center gap-3">
-            <motion.div
-              animate={{ rotate: [0, -10, 10, 0] }}
-              transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-              className="w-12 h-12 rounded-2xl bg-gradient-to-br from-edujoy-primary-400 to-fun-purple flex items-center justify-center text-2xl shadow-md"
-            >
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-edujoy-primary-400 to-fun-purple flex items-center justify-center text-2xl shadow-md">
               🦉
-            </motion.div>
+            </div>
             <div>
               <h1 className="font-black text-gray-800 text-lg">
                 Edu — AI Study Buddy
@@ -162,16 +157,10 @@ export default function AITutorPage() {
 
         {/* Suggested Prompts (only when just welcome message) */}
         {messages.length === 1 && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-4 flex-shrink-0"
-          >
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-4 flex-shrink-0">
             {SUGGESTED_PROMPTS.map((prompt, i) => (
-              <motion.button
+              <button
                 key={i}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
                 onClick={() => sendMessage(prompt.text)}
                 className="flex items-start gap-2 p-3 rounded-2xl border-2 border-gray-100 bg-white hover:border-edujoy-primary-200 hover:bg-edujoy-primary-50 text-left transition-all"
               >
@@ -179,18 +168,16 @@ export default function AITutorPage() {
                 <span className="text-xs font-medium text-gray-600 leading-snug">
                   {prompt.text}
                 </span>
-              </motion.button>
+              </button>
             ))}
-          </motion.div>
+          </div>
         )}
 
         {/* Messages */}
         <div className="flex-1 overflow-y-auto space-y-4 pb-4 pr-1">
           {messages.map((msg) => (
-            <motion.div
+            <div
               key={msg.id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
               className={`flex gap-3 ${msg.role === "user" ? "flex-row-reverse" : ""}`}
             >
               {/* Avatar */}
@@ -224,40 +211,28 @@ export default function AITutorPage() {
                   })}
                 </p>
               </div>
-            </motion.div>
+            </div>
           ))}
 
           {/* Loading indicator */}
-          <AnimatePresence>
-            {isLoading && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="flex gap-3"
-              >
-                <div className="w-9 h-9 rounded-2xl bg-gradient-to-br from-edujoy-primary-300 to-fun-purple flex items-center justify-center text-xl shadow-sm">
-                  🦉
+          {isLoading && (
+            <div className="flex gap-3">
+              <div className="w-9 h-9 rounded-2xl bg-gradient-to-br from-edujoy-primary-300 to-fun-purple flex items-center justify-center text-xl shadow-sm">
+                🦉
+              </div>
+              <div className="bg-white border border-gray-100 rounded-2xl rounded-tl-sm px-4 py-3">
+                <div className="flex items-center gap-1.5">
+                  {[0, 1, 2].map((i) => (
+                    <div
+                      key={i}
+                      className="w-2 h-2 bg-edujoy-primary-400 rounded-full animate-bounce"
+                      style={{ animationDelay: `${i * 150}ms` }}
+                    />
+                  ))}
                 </div>
-                <div className="bg-white border border-gray-100 rounded-2xl rounded-tl-sm px-4 py-3">
-                  <div className="flex items-center gap-1.5">
-                    {[0, 1, 2].map((i) => (
-                      <motion.div
-                        key={i}
-                        animate={{ y: [-4, 0, -4] }}
-                        transition={{
-                          duration: 0.6,
-                          delay: i * 0.15,
-                          repeat: Infinity,
-                        }}
-                        className="w-2 h-2 bg-edujoy-primary-400 rounded-full"
-                      />
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+              </div>
+            </div>
+          )}
           <div ref={bottomRef} />
         </div>
 
@@ -270,15 +245,13 @@ export default function AITutorPage() {
             disabled={isLoading}
             className="flex-1 px-4 py-3 rounded-2xl border-2 border-gray-200 focus:border-edujoy-primary-400 focus:outline-none font-medium text-gray-800 disabled:opacity-60"
           />
-          <motion.button
+          <button
             type="submit"
             disabled={!input.trim() || isLoading}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="w-12 h-12 rounded-2xl bg-gradient-to-br from-edujoy-primary-400 to-fun-purple text-white flex items-center justify-center disabled:opacity-40 shadow-md flex-shrink-0"
+            className="w-12 h-12 rounded-2xl bg-gradient-to-br from-edujoy-primary-400 to-fun-purple text-white flex items-center justify-center disabled:opacity-40 shadow-md flex-shrink-0 transition-transform hover:scale-105 active:scale-95"
           >
             <Send size={18} />
-          </motion.button>
+          </button>
         </form>
       </div>
     </DashboardLayout>

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -101,14 +100,12 @@ const FloatingShape = ({
   y: string;
   delay: number;
 }) => (
-  <motion.div
-    className="absolute pointer-events-none select-none drop-shadow-lg"
-    style={{ left: x, top: y }}
-    animate={{ y: [-12, 12, -12], rotate: [-8, 8, -8] }}
-    transition={{ duration: 4, repeat: Infinity, delay, ease: "easeInOut" }}
+  <div
+    className="absolute pointer-events-none select-none drop-shadow-lg hero-float"
+    style={{ left: x, top: y, animationDelay: `${delay}s` }}
   >
     {children}
-  </motion.div>
+  </div>
 );
 
 export default function LoginPage() {
@@ -207,12 +204,7 @@ export default function LoginPage() {
         <DiamondShape size={22} color="#F87171" />
       </FloatingShape>
 
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="w-full max-w-md"
-      >
+      <div className="w-full max-w-md">
         {/* Logo */}
         <Link href="/" className="flex items-center justify-center gap-2 mb-8">
           <div className="w-12 h-12 rounded-full bg-gradient-to-br from-edujoy-primary-400 to-fun-purple flex items-center justify-center">
@@ -228,14 +220,9 @@ export default function LoginPage() {
         {/* Card */}
         <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 p-8">
           <div className="text-center mb-6">
-            <motion.div
-              initial={{ scale: 0, rotate: -180 }}
-              animate={{ scale: 1, rotate: 0 }}
-              transition={{ type: "spring", stiffness: 200, damping: 14 }}
-              className="w-16 h-16 mx-auto mb-3 rounded-2xl bg-gradient-to-br from-edujoy-primary-400 to-fun-purple flex items-center justify-center shadow-lg"
-            >
+            <div className="w-16 h-16 mx-auto mb-3 rounded-2xl bg-gradient-to-br from-edujoy-primary-400 to-fun-purple flex items-center justify-center shadow-lg">
               <Rocket size={32} className="text-white" />
-            </motion.div>
+            </div>
             <h1 className="text-3xl font-black text-gray-800">Welcome Back!</h1>
             <p className="text-gray-500 mt-1">
               Sign in to continue your adventure
@@ -307,11 +294,9 @@ export default function LoginPage() {
             </div>
 
             {/* Submit */}
-            <motion.button
+            <button
               type="submit"
               disabled={isLoading}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
               className="btn-fun w-full py-4 text-lg font-black disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {isLoading ? (
@@ -322,7 +307,7 @@ export default function LoginPage() {
                   Sign In
                 </>
               )}
-            </motion.button>
+            </button>
 
             {/* Trust badges */}
             <div className="flex items-center justify-center gap-4 mt-3">
@@ -387,7 +372,7 @@ export default function LoginPage() {
             </Link>
           </p>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }

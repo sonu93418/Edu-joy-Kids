@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -160,22 +159,16 @@ export default function VerifyEmailPage() {
     <div className="min-h-screen bg-gradient-to-br from-fun-blue/20 via-edujoy-primary-100 to-fun-pink/20 flex items-center justify-center p-4 relative overflow-hidden">
       {/* SVG floating decorations — no emoji */}
       {FLOATERS.map(({ node, left, top, delay }, i) => (
-        <motion.div
+        <div
           key={i}
-          className="absolute pointer-events-none select-none drop-shadow-md"
-          style={{ left, top }}
-          animate={{ y: [-10, 10, -10], rotate: [-8, 8, -8] }}
-          transition={{ duration: 3 + i * 0.4, repeat: Infinity, delay }}
+          className="absolute pointer-events-none select-none drop-shadow-md hero-float"
+          style={{ left, top, animationDelay: `${delay}s` }}
         >
           {node}
-        </motion.div>
+        </div>
       ))}
 
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md"
-      >
+      <div className="w-full max-w-md">
         {/* Logo */}
         <Link href="/" className="flex items-center justify-center gap-2 mb-8">
           <div className="w-12 h-12 rounded-full bg-gradient-to-br from-edujoy-primary-400 to-fun-purple flex items-center justify-center">
@@ -190,18 +183,13 @@ export default function VerifyEmailPage() {
 
         <div className="bg-white rounded-3xl shadow-2xl p-8 text-center">
           {/* Icon */}
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: "spring", delay: 0.2 }}
-            className="w-20 h-20 bg-fun-blue/10 rounded-full flex items-center justify-center mx-auto mb-6"
-          >
+          <div className="w-20 h-20 bg-fun-blue/10 rounded-full flex items-center justify-center mx-auto mb-6">
             {resent ? (
               <CheckCircle className="w-10 h-10 text-green-500" />
             ) : (
               <Mail className="w-10 h-10 text-edujoy-primary-500" />
             )}
-          </motion.div>
+          </div>
 
           <h1 className="text-2xl font-black text-gray-800 mb-2 flex items-center justify-center gap-2">
             <SendHorizonal size={22} className="text-edujoy-primary-500" />
@@ -220,19 +208,15 @@ export default function VerifyEmailPage() {
 
           {/* Actions */}
           <div className="space-y-3">
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+            <button
               onClick={handleContinue}
-              className="w-full py-3 px-6 bg-gradient-to-r from-edujoy-primary-500 to-fun-purple text-white font-bold rounded-2xl flex items-center justify-center gap-2 shadow-lg"
+              className="w-full py-3 px-6 bg-gradient-to-r from-edujoy-primary-500 to-fun-purple text-white font-bold rounded-2xl flex items-center justify-center gap-2 shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-transform"
             >
               Continue to Dashboard
               <ArrowRight size={18} />
-            </motion.button>
+            </button>
 
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+            <button
               onClick={handleResend}
               disabled={resending || resent}
               className="w-full py-3 px-6 border-2 border-edujoy-primary-200 text-edujoy-primary-600 font-bold rounded-2xl flex items-center justify-center gap-2 hover:bg-edujoy-primary-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
@@ -253,7 +237,7 @@ export default function VerifyEmailPage() {
                   Resend Verification Email
                 </>
               )}
-            </motion.button>
+            </button>
           </div>
 
           <p className="mt-6 text-sm text-gray-400">
@@ -266,7 +250,7 @@ export default function VerifyEmailPage() {
             </Link>
           </p>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }
