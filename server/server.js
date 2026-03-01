@@ -1,6 +1,12 @@
 import dotenv from "dotenv";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
+
+// Resolve __dirname for ES modules and load .env from the server directory
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 // Load env vars FIRST before any other module reads process.env
-dotenv.config();
+dotenv.config({ path: join(__dirname, ".env") });
 
 import express from "express";
 import cors from "cors";

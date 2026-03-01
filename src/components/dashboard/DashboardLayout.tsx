@@ -97,16 +97,23 @@ export default function DashboardLayout({
 
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  // Safety: treat hydration as complete after 3 s even if Zustand callback misfires
+  const [forceHydrated, setForceHydrated] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setForceHydrated(true), 3000);
+    return () => clearTimeout(t);
+  }, []);
+  const isHydrated = _hasHydrated || forceHydrated;
 
   /* ── Auth guard ── */
   useEffect(() => {
-    if (!_hasHydrated) return;
+    if (!isHydrated) return;
     if (!isAuthenticated) {
       router.replace(
         `/auth/login?redirect=${encodeURIComponent(pathname ?? "/")}`,
       );
     }
-  }, [_hasHydrated, isAuthenticated, pathname, router]);
+  }, [isHydrated, isAuthenticated, pathname, router]);
 
   /* Close mobile drawer on route change */
   useEffect(() => {
@@ -114,7 +121,7 @@ export default function DashboardLayout({
   }, [pathname]);
 
   /* Spinner while hydrating */
-  if (!_hasHydrated || (!isAuthenticated && _hasHydrated)) {
+  if (!isHydrated || (!isAuthenticated && isHydrated)) {
     return (
       <div className="flex h-screen items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-violet-50">
         <div className="flex flex-col items-center gap-4">

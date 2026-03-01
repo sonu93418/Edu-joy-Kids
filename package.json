@@ -4,12 +4,13 @@
   "description": "EduJoy Kids - Where Learning Feels Like Play",
   "main": "index.js",
   "scripts": {
-    "dev": "next dev",
+    "dev": "concurrently \"nodemon --cwd server server.js\" \"next dev --port 3000\"",
+    "dev:next": "next dev --port 3000",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "server": "nodemon server/server.js",
-    "dev:full": "concurrently \"npm run server\" \"npm run dev\""
+    "dev:full": "concurrently \"npm run server\" \"npm run dev:next\""
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.0",

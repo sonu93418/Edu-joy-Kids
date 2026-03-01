@@ -226,7 +226,7 @@ export default function VerifyEmailPage() {
                   <RefreshCw size={18} className="animate-spin" />
                   Sending...
                 </>
-              ) : resent ? (
+              ) : resent ? (  
                 <>
                   <CheckCircle size={18} />
                   Email Sent!
