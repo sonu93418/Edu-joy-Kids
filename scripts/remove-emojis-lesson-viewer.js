@@ -1,0 +1,28 @@
+const fs = require("fs");
+const path = require("path");
+
+const filePath = path.join(
+  __dirname,
+  "..",
+  "src",
+  "app",
+  "student",
+  "lesson",
+  "[lessonId]",
+  "page.tsx",
+);
+
+// Read the file
+const content = fs.readFileSync(filePath, "utf8");
+
+// Remove all lines that match the emoji pattern
+const lines = content.split("\n");
+const filteredLines = lines.filter((line) => {
+  // Match lines like:        emoji: "🔤",
+  return !line.match(/^\s+emoji:\s*".*",?\s*$/);
+});
+
+// Write back to file
+fs.writeFileSync(filePath, filteredLines.join("\n"), "utf8");
+
+console.log("✅ Removed all emoji properties from lesson viewer page");

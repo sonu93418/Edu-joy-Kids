@@ -93,7 +93,7 @@ export function LevelUpModal() {
       >
         <div className="text-7xl mb-4 animate-bounce select-none">🌟</div>
         <h2 className="text-3xl font-black text-gray-800 mb-2">Level Up!</h2>
-        <div className="inline-flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-2xl font-black text-xl mb-4 shadow">
+        <div className="inline-flex items-center gap-2 bg-edujoy-primary-600 text-white px-6 py-3 rounded-2xl font-black text-xl mb-4 shadow">
           <Star size={18} className="fill-white" /> Level {currentLevel}
         </div>
         <p className="text-gray-500 text-sm mb-6">
@@ -102,7 +102,7 @@ export function LevelUpModal() {
         </p>
         <button
           onClick={hideModals}
-          className="w-full py-3 bg-indigo-600 text-white font-black rounded-2xl hover:bg-indigo-700 transition-colors"
+          className="w-full py-3 bg-edujoy-primary-600 text-white font-black rounded-2xl hover:bg-edujoy-primary-700 transition-colors"
         >
           🚀 Keep Going!
         </button>

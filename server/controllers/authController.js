@@ -183,7 +183,14 @@ export const login = async (req, res) => {
     }
 
     // Remove sensitive data from response
-    const { password: _, refreshTokens, ...userResponse } = user.toObject();
+    const {
+      password: _,
+      refreshTokens,
+      verificationToken: __,
+      passwordResetToken: ___,
+      passwordResetExpires: ____,
+      ...userResponse
+    } = user.toObject();
 
     res.json({
       message: "Login successful",

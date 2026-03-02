@@ -14,7 +14,6 @@ import {
   Sparkles,
   Calculator,
   Microscope,
-  PenLine,
   Moon,
   Globe,
   ArrowRight,
@@ -24,10 +23,14 @@ import { useAuth } from "@/store/auth-store";
 import { useGame } from "@/store/game-store";
 
 const SUBJECTS = [
-  { id: "english", label: "English", Icon: BookOpen, bg: "bg-blue-500" },
-  { id: "math", label: "Mathematics", Icon: Calculator, bg: "bg-violet-500" },
+  { id: "english", label: "English", Icon: BookOpen, bg: "bg-fun-blue" },
+  {
+    id: "math",
+    label: "Mathematics",
+    Icon: Calculator,
+    bg: "bg-edujoy-primary-500",
+  },
   { id: "science", label: "Science", Icon: Microscope, bg: "bg-emerald-500" },
-  { id: "urdu", label: "Urdu", Icon: PenLine, bg: "bg-rose-500" },
   { id: "islamiat", label: "Islamiat", Icon: Moon, bg: "bg-amber-500" },
   { id: "social", label: "Social Studies", Icon: Globe, bg: "bg-teal-500" },
 ];
@@ -78,7 +81,7 @@ export default function StudentDashboard() {
         </div>
         <Link
           href="/student/learn"
-          className="inline-flex items-center gap-2 bg-indigo-600 text-white text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-indigo-700 transition-colors self-start sm:self-auto"
+          className="inline-flex items-center gap-2 bg-edujoy-primary-600 text-white text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-edujoy-primary-700 transition-colors self-start sm:self-auto"
         >
           <Play size={14} /> Continue Learning
         </Link>
@@ -115,9 +118,9 @@ export default function StudentDashboard() {
             label: "Level",
             value: `Level ${currentLevel}`,
             Icon: Trophy,
-            bg: "bg-violet-50",
-            ico: "text-violet-500",
-            ring: "ring-violet-100",
+            bg: "bg-edujoy-primary-50",
+            ico: "text-edujoy-primary-500",
+            ring: "ring-edujoy-primary-100",
           },
         ].map(({ label, value, Icon, bg, ico, ring }) => (
           <div
@@ -156,7 +159,7 @@ export default function StudentDashboard() {
           </div>
           <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-indigo-500 to-violet-500 rounded-full transition-all duration-500"
+              className="h-full bg-gradient-to-r from-edujoy-primary-500 to-edujoy-primary-700 rounded-full transition-all duration-500"
               style={{ width: `${xpPct}%` }}
             />
           </div>
@@ -174,7 +177,7 @@ export default function StudentDashboard() {
             <h2 className="font-bold text-gray-900">My Subjects</h2>
             <Link
               href="/student/learn"
-              className="text-xs text-indigo-600 font-semibold hover:underline flex items-center gap-1"
+              className="text-xs text-edujoy-primary-600 font-semibold hover:underline flex items-center gap-1"
             >
               View all <ArrowRight size={12} />
             </Link>
@@ -182,13 +185,13 @@ export default function StudentDashboard() {
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {SUBJECTS.map(({ id, label, Icon, bg }) => (
               <Link key={id} href="/student/learn">
-                <div className="flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:border-indigo-200 hover:bg-indigo-50 transition-all group cursor-pointer">
+                <div className="flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:border-edujoy-primary-200 hover:bg-edujoy-primary-50 transition-all group cursor-pointer">
                   <div
                     className={`${bg} w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0`}
                   >
                     <Icon size={14} className="text-white" />
                   </div>
-                  <span className="text-sm font-medium text-gray-700 group-hover:text-indigo-700 truncate">
+                  <span className="text-sm font-medium text-gray-700 group-hover:text-edujoy-primary-700 truncate">
                     {label}
                   </span>
                 </div>
@@ -210,13 +213,13 @@ export default function StudentDashboard() {
                   label: "Continue Learning",
                   href: "/student/learn",
                   Icon: Play,
-                  cls: "text-indigo-600 bg-indigo-50",
+                  cls: "text-edujoy-primary-600 bg-edujoy-primary-50",
                 },
                 {
                   label: "Ask AI Tutor",
                   href: "/student/ai-tutor",
                   Icon: Sparkles,
-                  cls: "text-violet-600 bg-violet-50",
+                  cls: "text-edujoy-primary-600 bg-edujoy-primary-50",
                 },
                 {
                   label: "Achievements",
@@ -252,17 +255,17 @@ export default function StudentDashboard() {
           </div>
 
           {/* AI Tutor */}
-          <div className="bg-violet-600 rounded-xl p-4 text-white">
+          <div className="bg-edujoy-primary-700 rounded-xl p-4 text-white">
             <div className="flex items-center gap-2 mb-1.5">
-              <Sparkles size={14} className="text-violet-200" />
+              <Sparkles size={14} className="text-edujoy-primary-200" />
               <span className="text-sm font-bold">AI Tutor</span>
             </div>
-            <p className="text-xs text-violet-200 mb-3 leading-relaxed">
+            <p className="text-xs text-edujoy-primary-200 mb-3 leading-relaxed">
               Stuck on a topic? Get instant, clear explanations 24/7.
             </p>
             <Link
               href="/student/ai-tutor"
-              className="inline-flex items-center gap-1.5 bg-white text-violet-700 text-xs font-bold px-3 py-2 rounded-lg hover:bg-violet-50 transition-colors"
+              className="inline-flex items-center gap-1.5 bg-white text-edujoy-primary-700 text-xs font-bold px-3 py-2 rounded-lg hover:bg-edujoy-primary-50 transition-colors"
             >
               Ask Now <ArrowRight size={12} />
             </Link>
@@ -287,9 +290,9 @@ export default function StudentDashboard() {
 
       {/* Getting Started (zero XP) */}
       {totalXP === 0 && (
-        <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
-          <div className="bg-indigo-100 p-3 rounded-xl flex-shrink-0">
-            <BookOpen size={20} className="text-indigo-600" />
+        <div className="bg-edujoy-primary-50 border border-edujoy-primary-100 rounded-xl p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+          <div className="bg-edujoy-primary-100 p-3 rounded-xl flex-shrink-0">
+            <BookOpen size={20} className="text-edujoy-primary-600" />
           </div>
           <div className="flex-1 min-w-0">
             <p className="font-bold text-gray-900">
@@ -302,7 +305,7 @@ export default function StudentDashboard() {
           </div>
           <Link
             href="/student/learn"
-            className="inline-flex items-center gap-2 bg-indigo-600 text-white text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-indigo-700 transition-colors flex-shrink-0"
+            className="inline-flex items-center gap-2 bg-edujoy-primary-600 text-white text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-edujoy-primary-700 transition-colors flex-shrink-0"
           >
             Start Learning <ArrowRight size={13} />
           </Link>

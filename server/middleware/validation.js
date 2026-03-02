@@ -22,8 +22,10 @@ export const handleValidationErrors = (req, res, next) => {
 // Common validation rules
 export const validateEmail = body("email")
   .isEmail()
-  .normalizeEmail()
-  .withMessage("Please provide a valid email address");
+  .withMessage("Please provide a valid email address")
+  .customSanitizer((value) =>
+    typeof value === "string" ? value.toLowerCase().trim() : value,
+  );
 
 export const validatePassword = body("password")
   .isLength({ min: 6 })

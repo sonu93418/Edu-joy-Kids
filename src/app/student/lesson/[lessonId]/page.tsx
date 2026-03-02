@@ -17,8 +17,9 @@ import {
 } from "lucide-react";
 import { useGame } from "@/store/game-store";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
+import { getLessonById } from "@/lib/lesson-data";
 
-// Mock lesson data
+// Legacy type kept for compatibility — data now comes from lesson-data library
 const MOCK_LESSONS: Record<
   string,
   {
@@ -31,7 +32,6 @@ const MOCK_LESSONS: Record<
       type: "content" | "quiz" | "result";
       title?: string;
       content?: string;
-      emoji?: string;
       question?: string;
       options?: string[];
       correct?: number;
@@ -49,14 +49,12 @@ const MOCK_LESSONS: Record<
       {
         type: "content",
         title: "What are Sight Words?",
-        emoji: "👁️",
         content:
           "Sight words are the most common words in the English language. We read them so often that we should know them by sight — without having to sound them out!\n\nExamples: the, a, is, are, was, were, I, you, he, she, it, we, they",
       },
       {
         type: "content",
         title: "Common Sight Words",
-        emoji: "📚",
         content:
           'Let\'s learn some important sight words:\n\n🔵 THE — "The cat sat on the mat."\n🔵 AND — "Tom and Jerry are friends."\n🔵 IS — "She is happy."\n🔵 ARE — "They are playing."\n🔵 HAVE — "I have a book."',
       },
@@ -110,7 +108,6 @@ const MOCK_LESSONS: Record<
       {
         type: "content",
         title: "2D Shapes",
-        emoji: "🔷",
         content:
           "Let's learn about 2D (flat) shapes!\n\n🔴 Circle — round, no corners\n🟦 Square — 4 equal sides, 4 corners\n🟩 Rectangle — 4 sides, opposite sides equal\n🔺 Triangle — 3 sides, 3 corners\n🔶 Rhombus — 4 equal sides, like a diamond",
       },
@@ -140,13 +137,13 @@ const MOCK_LESSONS: Record<
   },
 };
 
-const DEFAULT_LESSON = MOCK_LESSONS.e4;
-
 export default function LessonViewerPage() {
   const { lessonId } = useParams() as { lessonId: string };
   const router = useRouter();
   const { addXP } = useGame();
-  const lesson = MOCK_LESSONS[lessonId] || DEFAULT_LESSON;
+  // Look up in centralized library first, fall back to legacy mock for old IDs
+  const lesson =
+    getLessonById(lessonId) || MOCK_LESSONS[lessonId] || MOCK_LESSONS.e4;
 
   const [currentSlide, setCurrentSlide] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
@@ -240,7 +237,6 @@ export default function LessonViewerPage() {
             {slide.type === "content" && (
               <>
                 <div className="text-center mb-6">
-                  <div className="text-6xl mb-3">{slide.emoji}</div>
                   <h2 className="text-2xl font-black text-gray-800">
                     {slide.title}
                   </h2>
@@ -371,7 +367,7 @@ export default function LessonViewerPage() {
                     </p>
                     <p className="text-xs text-gray-500">Correct</p>
                   </div>
-                  <div className="bg-purple-50 rounded-2xl p-3">
+                  <div className="bg-edujoy-primary-50 rounded-2xl p-3">
                     <p className="text-2xl font-black text-fun-purple">
                       {stars}
                     </p>

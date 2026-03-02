@@ -16,7 +16,7 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-violet-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-edujoy-primary-50 via-white to-edujoy-primary-100 flex items-center justify-center p-4">
       <div className="max-w-md w-full text-center">
         {/* Icon */}
         <div className="flex justify-center mb-6">
@@ -47,7 +47,7 @@ export default function Error({
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <button
             onClick={reset}
-            className="inline-flex items-center justify-center gap-2 bg-indigo-600 text-white font-bold text-sm px-6 py-3 rounded-xl hover:bg-indigo-700 transition-colors"
+            className="inline-flex items-center justify-center gap-2 bg-edujoy-primary-600 text-white font-bold text-sm px-6 py-3 rounded-xl hover:bg-edujoy-primary-700 transition-colors"
           >
             <RefreshCw size={15} /> Try Again
           </button>

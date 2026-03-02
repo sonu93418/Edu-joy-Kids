@@ -21,19 +21,19 @@ const QUICK_LINKS = [
     label: "Users",
     href: "/admin",
     Icon: Users,
-    cls: "text-indigo-600 bg-indigo-50",
+    cls: "text-edujoy-primary-600 bg-edujoy-primary-50",
   },
   {
     label: "Content",
     href: "/admin",
     Icon: BookOpen,
-    cls: "text-blue-600   bg-blue-50",
+    cls: "text-fun-blue bg-blue-50",
   },
   {
     label: "Analytics",
     href: "/admin",
     Icon: BarChart2,
-    cls: "text-violet-600 bg-violet-50",
+    cls: "text-edujoy-primary-700 bg-edujoy-primary-50",
   },
   {
     label: "Subscriptions",
@@ -60,9 +60,9 @@ const STATS = [
     label: "Total Users",
     value: "—",
     Icon: Users,
-    ring: "ring-indigo-100",
-    ico: "text-indigo-500",
-    bg: "bg-indigo-50",
+    ring: "ring-edujoy-primary-100",
+    ico: "text-edujoy-primary-500",
+    bg: "bg-edujoy-primary-50",
   },
   {
     label: "Active Today",
@@ -76,17 +76,17 @@ const STATS = [
     label: "Revenue",
     value: "—",
     Icon: CreditCard,
-    ring: "ring-blue-100",
-    ico: "text-blue-500",
+    ring: "ring-fun-blue/20",
+    ico: "text-fun-blue",
     bg: "bg-blue-50",
   },
   {
     label: "Lessons",
     value: "—",
     Icon: BookOpen,
-    ring: "ring-violet-100",
-    ico: "text-violet-500",
-    bg: "bg-violet-50",
+    ring: "ring-edujoy-primary-200",
+    ico: "text-edujoy-primary-600",
+    bg: "bg-edujoy-primary-50",
   },
 ];
 
@@ -142,7 +142,7 @@ export default function AdminDashboard() {
             <h2 className="font-bold text-gray-900">Platform Activity</h2>
             <Link
               href="/admin"
-              className="text-xs text-indigo-600 font-semibold hover:underline flex items-center gap-1"
+              className="text-xs text-edujoy-primary-600 font-semibold hover:underline flex items-center gap-1"
             >
               Full report <ArrowRight size={12} />
             </Link>

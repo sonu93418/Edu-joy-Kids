@@ -77,11 +77,11 @@ const navsByRole: Record<string, NavItem[]> = {
 };
 
 const roleGradients: Record<string, string> = {
-  student: "from-indigo-500 to-violet-600",
-  parent: "from-blue-500  to-indigo-600",
+  student: "from-edujoy-primary-500 to-edujoy-primary-700",
+  parent: "from-fun-blue to-edujoy-primary-600",
   teacher: "from-emerald-500 to-teal-600",
   admin: "from-gray-600  to-gray-800",
-  school_admin: "from-orange-500 to-pink-500",
+  school_admin: "from-orange-500 to-fun-pink",
 };
 
 export default function DashboardLayout({
@@ -123,16 +123,16 @@ export default function DashboardLayout({
   /* Spinner while hydrating */
   if (!isHydrated || (!isAuthenticated && isHydrated)) {
     return (
-      <div className="flex h-screen items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-violet-50">
+      <div className="flex h-screen items-center justify-center bg-gradient-to-br from-edujoy-primary-50 via-white to-edujoy-primary-100">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-lg animate-pulse">
+          <div className="w-14 h-14 rounded-2xl bg-edujoy-primary-600 flex items-center justify-center shadow-lg animate-pulse">
             <span className="text-white text-2xl font-black">E</span>
           </div>
           <div className="flex gap-1.5">
             {[0, 150, 300].map((d) => (
               <span
                 key={d}
-                className="w-2.5 h-2.5 rounded-full bg-indigo-400 animate-bounce"
+                className="w-2.5 h-2.5 rounded-full bg-edujoy-primary-400 animate-bounce"
                 style={{ animationDelay: `${d}ms` }}
               />
             ))}
@@ -178,15 +178,15 @@ export default function DashboardLayout({
         </div>
         {(mobile || !collapsed) && (
           <span className="text-lg font-black leading-none">
-            <span className="text-indigo-600">Edu</span>
-            <span className="text-violet-600">Joy</span>
+            <span className="text-edujoy-primary-600">Edu</span>
+            <span className="text-edujoy-primary-700">Joy</span>
           </span>
         )}
       </div>
 
       {/* Student quick stats */}
       {role === "student" && (mobile || !collapsed) && (
-        <div className="mx-3 mb-3 p-3 rounded-xl bg-indigo-50 border border-indigo-100">
+        <div className="mx-3 mb-3 p-3 rounded-xl bg-edujoy-primary-50 border border-edujoy-primary-100">
           <div className="flex items-center gap-2 mb-2">
             <div
               className={`w-9 h-9 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center flex-shrink-0`}

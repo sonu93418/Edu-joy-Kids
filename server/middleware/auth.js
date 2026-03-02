@@ -14,8 +14,11 @@ export const createRateLimit = (windowMs, maxRequests, message) => {
     standardHeaders: true,
     legacyHeaders: false,
     skip: (req) => {
-      // Skip rate limiting for admin users in development
-      return process.env.NODE_ENV === "development" && req.ip === "127.0.0.1";
+      // Skip rate limiting for localhost in development (handles both IPv4 and IPv6)
+      const ip = req.ip || "";
+      const isLocalhost =
+        ip === "127.0.0.1" || ip === "::1" || ip.startsWith("::ffff:127.");
+      return process.env.NODE_ENV === "development" && isLocalhost;
     },
   });
 };

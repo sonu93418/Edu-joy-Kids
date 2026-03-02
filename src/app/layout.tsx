@@ -70,7 +70,7 @@ export default function RootLayout({
         />
         <link rel="manifest" href="/manifest.json" />
       </head>
-      <body className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 font-kidsfont">
+      <body className="min-h-screen bg-gradient-to-br from-edujoy-primary-50 via-fun-pink/10 to-fun-blue/10 font-kidsfont">
         <Providers>
           <div className="relative">
             {children}

@@ -180,14 +180,36 @@ export default function SignupPage() {
         accessToken: string;
         error?: string;
         message?: string;
+        details?: { field: string; message: string }[];
       }>(res);
-      if (!res.ok)
-        throw new Error(
-          result.error || result.message || "Registration failed",
-        );
+      if (!res.ok) {
+        // Show the first specific validation detail if available
+        const msg =
+          result.details?.[0]?.message ||
+          result.error ||
+          result.message ||
+          "Registration failed";
+        throw new Error(msg);
+      }
       login(result.user, result.accessToken, undefined);
-      toast.success("Account created! Check your email to verify.");
-      router.push("/auth/verify");
+
+      // Set auth cookies so Next.js middleware can protect routes
+      const maxAge = 60 * 60 * 24 * 7; // 7 days
+      document.cookie = `accessToken=${result.accessToken}; path=/; max-age=${maxAge}; SameSite=Lax`;
+      document.cookie = `userRole=${result.user.role}; path=/; max-age=${maxAge}; SameSite=Lax`;
+
+      toast.success(
+        `Welcome, ${result.user.fullName?.split(" ")[0] ?? "friend"}! 🎉 Check your email to verify your account.`,
+        { duration: 5000 },
+      );
+      const dashboardMap: Record<string, string> = {
+        student: "/student",
+        parent: "/parent",
+        teacher: "/teacher",
+        admin: "/admin",
+        school_admin: "/school",
+      };
+      router.push(dashboardMap[result.user.role] ?? "/");
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : "Something went wrong");
     }
@@ -288,7 +310,7 @@ export default function SignupPage() {
         <div className="card-fun p-8">
           <div>
             {step === 1 && (
-            <div>
+              <div>
                 <div className="text-center mb-6">
                   <div className="w-14 h-14 mx-auto mb-3 rounded-2xl bg-gradient-to-br from-edujoy-primary-400 to-fun-purple flex items-center justify-center shadow-lg">
                     <Rocket size={28} className="text-white" />
@@ -408,8 +430,8 @@ export default function SignupPage() {
               </div>
             )}
 
-          {step === 2 && (
-            <div>
+            {step === 2 && (
+              <div>
                 <div className="text-center mb-6">
                   <div className="w-14 h-14 mx-auto mb-3 rounded-2xl bg-gradient-to-br from-fun-purple to-fun-pink flex items-center justify-center shadow-lg">
                     <Lock size={28} className="text-white" />

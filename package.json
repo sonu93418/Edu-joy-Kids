@@ -4,6 +4,7 @@
   "description": "EduJoy Kids - Where Learning Feels Like Play",
   "main": "index.js",
   "scripts": {
+    "predev": "node scripts/kill-ports.js",
     "dev": "concurrently \"nodemon --cwd server server.js\" \"next dev --port 3000\"",
     "dev:next": "next dev --port 3000",
     "build": "next build",

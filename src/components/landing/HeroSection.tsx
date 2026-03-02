@@ -180,9 +180,9 @@ export default function HeroSection() {
       />
 
       {/* ── Soft coloured blobs ── */}
-      <div className="absolute -top-24 -left-24 w-80 h-80 rounded-full bg-violet-300 opacity-20 blur-3xl hero-pulse-blob pointer-events-none" />
+      <div className="absolute -top-24 -left-24 w-80 h-80 rounded-full bg-edujoy-primary-300 opacity-20 blur-3xl hero-pulse-blob pointer-events-none" />
       <div
-        className="absolute -top-16 -right-20 w-96 h-96 rounded-full bg-indigo-300 opacity-20 blur-3xl hero-pulse-blob pointer-events-none"
+        className="absolute -top-16 -right-20 w-96 h-96 rounded-full bg-edujoy-primary-400 opacity-20 blur-3xl hero-pulse-blob pointer-events-none"
         style={{ animationDelay: "2s" }}
       />
       <div
@@ -190,7 +190,7 @@ export default function HeroSection() {
         style={{ animationDelay: "1s" }}
       />
       <div
-        className="absolute top-1/2 -right-28 w-72 h-72 rounded-full bg-pink-200 opacity-20 blur-3xl hero-pulse-blob pointer-events-none"
+        className="absolute top-1/2 -right-28 w-72 h-72 rounded-full bg-fun-pink opacity-10 blur-3xl hero-pulse-blob pointer-events-none"
         style={{ animationDelay: "3s" }}
       />
       <div
@@ -219,9 +219,9 @@ export default function HeroSection() {
         className="absolute top-40 right-[12%] w-4 h-4 rounded-full bg-rose-400 opacity-50 hero-twinkle pointer-events-none"
         style={{ animationDelay: "1.8s" }}
       />
-      <div className="absolute top-64 left-[18%] w-5 h-5 rounded bg-indigo-400 opacity-40 hero-spin-slow pointer-events-none" />
+      <div className="absolute top-64 left-[18%] w-5 h-5 rounded bg-edujoy-primary-400 opacity-40 hero-spin-slow pointer-events-none" />
       <div
-        className="absolute top-56 right-[18%] w-4 h-4 rounded bg-violet-400 opacity-40 hero-spin-slow pointer-events-none"
+        className="absolute top-56 right-[18%] w-4 h-4 rounded bg-edujoy-primary-500 opacity-40 hero-spin-slow pointer-events-none"
         style={{ animationDelay: "-10s" }}
       />
       <div
@@ -229,7 +229,7 @@ export default function HeroSection() {
         style={{ animationDelay: "2.2s" }}
       />
       <div
-        className="absolute top-96 right-[9%] w-3 h-3 rounded-full bg-blue-400 opacity-50 hero-float pointer-events-none"
+        className="absolute top-96 right-[9%] w-3 h-3 rounded-full bg-fun-blue opacity-40 hero-float pointer-events-none"
         style={{ animationDelay: "1.3s" }}
       />
 
@@ -237,8 +237,8 @@ export default function HeroSection() {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-16">
         {/* BADGE */}
         <div className="flex justify-center mb-6">
-          <span className="inline-flex items-center gap-2 bg-white/90 text-indigo-700 text-sm font-semibold px-4 py-1.5 rounded-full border border-indigo-200 shadow-sm backdrop-blur-sm">
-            <Sparkles size={14} className="text-indigo-500" />
+          <span className="inline-flex items-center gap-2 bg-white/90 text-edujoy-primary-700 text-sm font-semibold px-4 py-1.5 rounded-full border border-edujoy-primary-200 shadow-sm backdrop-blur-sm">
+            <Sparkles size={14} className="text-edujoy-primary-500" />
             AI-Powered Learning Platform for Kids
           </span>
         </div>
@@ -270,13 +270,13 @@ export default function HeroSection() {
         <div className="flex flex-col sm:flex-row gap-3 justify-center mb-6">
           <Link
             href="/auth/signup"
-            className="inline-flex items-center justify-center gap-2 bg-indigo-600 text-white font-bold text-base px-7 py-3.5 rounded-xl hover:bg-indigo-700 active:scale-95 transition-all shadow-lg shadow-indigo-200"
+            className="inline-flex items-center justify-center gap-2 bg-edujoy-primary-600 text-white font-bold text-base px-7 py-3.5 rounded-xl hover:bg-edujoy-primary-700 active:scale-95 transition-all shadow-lg shadow-edujoy-primary-200"
           >
             <Zap size={17} /> Start Learning Free <ArrowRight size={17} />
           </Link>
           <Link
             href="/auth/login"
-            className="inline-flex items-center justify-center gap-2 bg-white/90 text-gray-700 font-semibold text-base px-7 py-3.5 rounded-xl border border-gray-200 hover:bg-white hover:border-indigo-200 hover:shadow-md active:scale-95 transition-all backdrop-blur-sm"
+            className="inline-flex items-center justify-center gap-2 bg-white/90 text-gray-700 font-semibold text-base px-7 py-3.5 rounded-xl border border-gray-200 hover:bg-white hover:border-edujoy-primary-200 hover:shadow-md active:scale-95 transition-all backdrop-blur-sm"
           >
             <BookOpen size={17} /> Parent Login
           </Link>
@@ -302,7 +302,10 @@ export default function HeroSection() {
               key={label}
               className="text-center bg-white/80 backdrop-blur-sm rounded-2xl py-5 px-2 border border-white shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
             >
-              <Icon size={20} className="text-indigo-500 mx-auto mb-1" />
+              <Icon
+                size={20}
+                className="text-edujoy-primary-500 mx-auto mb-1"
+              />
               <p className="text-2xl font-extrabold text-gray-900">{value}</p>
               <p className="text-xs text-gray-500 mt-0.5">{label}</p>
             </div>
@@ -314,23 +317,23 @@ export default function HeroSection() {
           {HIGHLIGHTS.map(({ icon: Icon, label }) => (
             <span
               key={label}
-              className="inline-flex items-center gap-2 bg-white/90 border border-indigo-100 rounded-xl px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm hover:border-indigo-300 hover:bg-indigo-50 hover:-translate-y-0.5 transition-all backdrop-blur-sm cursor-default"
+              className="inline-flex items-center gap-2 bg-white/90 border border-edujoy-primary-100 rounded-xl px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm hover:border-edujoy-primary-300 hover:bg-edujoy-primary-50 hover:-translate-y-0.5 transition-all backdrop-blur-sm cursor-default"
             >
-              <Icon size={15} className="text-indigo-500" /> {label}
+              <Icon size={15} className="text-edujoy-primary-500" /> {label}
             </span>
           ))}
         </div>
 
         {/* GRADE GRID */}
-        <div className="border-t border-indigo-100 pt-10">
+        <div className="border-t border-edujoy-primary-100 pt-10">
           <p className="text-center text-xs font-semibold text-gray-400 uppercase tracking-widest mb-6">
             Available for all grades
           </p>
           <div className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-9 gap-2">
             {GRADES.map(({ label, age }) => (
               <Link key={label} href="/auth/signup">
-                <div className="group bg-white/80 backdrop-blur-sm border border-gray-100 rounded-xl px-2 py-3 text-center hover:border-indigo-300 hover:bg-indigo-50 hover:-translate-y-0.5 hover:shadow-sm transition-all cursor-pointer">
-                  <p className="text-xs font-bold text-gray-800 group-hover:text-indigo-700">
+                <div className="group bg-white/80 backdrop-blur-sm border border-gray-100 rounded-xl px-2 py-3 text-center hover:border-edujoy-primary-300 hover:bg-edujoy-primary-50 hover:-translate-y-0.5 hover:shadow-sm transition-all cursor-pointer">
+                  <p className="text-xs font-bold text-gray-800 group-hover:text-edujoy-primary-700">
                     {label}
                   </p>
                   <p className="text-xs text-gray-400 mt-0.5">{age}</p>

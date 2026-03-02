@@ -112,10 +112,14 @@ export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams?.get("redirect") ?? "";
-  const { login, isLoading, isAuthenticated, user } = useAuth();
+  const { login, logout, isLoading, isAuthenticated, user, _hasHydrated } =
+    useAuth();
   const [showPassword, setShowPassword] = useState(false);
 
-  // Auto-redirect if already logged in
+  // Auto-redirect if already logged in — but ONLY after hydration
+  // and ONLY if a valid accessToken cookie is still in the browser.
+  // Without these guards, stale Zustand localStorage state kicks users
+  // out of the login page even though their session has really expired.
   const dashboardMap: Record<string, string> = {
     student: "/student",
     parent: "/parent",
@@ -124,16 +128,28 @@ export default function LoginPage() {
     school_admin: "/school",
   };
   useEffect(() => {
+    if (!_hasHydrated) return; // wait for localStorage to rehydrate
+
     if (isAuthenticated && user?.role) {
-      // Refresh cookies in case they expired while localStorage session remained
-      const maxAge = 60 * 60 * 24 * 7;
-      if (typeof document !== "undefined") {
-        document.cookie = `userRole=${user.role}; path=/; max-age=${maxAge}; SameSite=Lax`;
+      // Check the actual browser cookie — it may have expired (7-day max-age)
+      // even though Zustand localStorage still says isAuthenticated: true.
+      const hasCookie =
+        typeof document !== "undefined" &&
+        document.cookie.includes("accessToken=");
+
+      if (!hasCookie) {
+        // Stale session — clear it and let the user log in fresh
+        logout();
+        return;
       }
+
+      // Refresh role cookie and redirect
+      const maxAge = 60 * 60 * 24 * 7;
+      document.cookie = `userRole=${user.role}; path=/; max-age=${maxAge}; SameSite=Lax`;
       router.replace(redirect || dashboardMap[user.role] || "/");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticated, user]);
+  }, [isAuthenticated, user, _hasHydrated]);
 
   const {
     register,
@@ -153,9 +169,17 @@ export default function LoginPage() {
         user: any;
         accessToken: string;
         student?: any;
+        error?: string;
         message?: string;
+        details?: { field: string; message: string }[];
       }>(res);
-      if (!res.ok) throw new Error(result.message || "Login failed");
+      if (!res.ok)
+        throw new Error(
+          result.details?.[0]?.message ||
+            result.error ||
+            result.message ||
+            "Login failed",
+        );
       login(result.user, result.accessToken, result.student || null);
 
       // Set cookies so the middleware can verify auth on protected routes
@@ -181,7 +205,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-50 via-sky-50 to-fuchsia-50 flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-edujoy-primary-50 via-sky-50 to-fun-pink/20 flex items-center justify-center p-4 relative overflow-hidden">
       <FloatingShape x="5%" y="10%" delay={0}>
         <StarShape size={36} color="#FFD700" />
       </FloatingShape>
@@ -354,23 +378,18 @@ export default function LoginPage() {
             </div>
           </form>
 
-          {/* Divider */}
-          <div className="flex items-center gap-3 my-5">
-            <div className="flex-1 h-px bg-gray-200" />
-            <span className="text-gray-400 text-sm">or</span>
-            <div className="flex-1 h-px bg-gray-200" />
-          </div>
-
           {/* Sign up link */}
-          <p className="text-center text-gray-600">
-            New here?{" "}
-            <Link
-              href="/auth/signup"
-              className="text-edujoy-primary-500 font-black hover:underline inline-flex items-center gap-1"
-            >
-              Create Free Account <Sparkles size={14} />
-            </Link>
-          </p>
+          <div className="mt-6">
+            <p className="text-center text-gray-600">
+              New here?{" "}
+              <Link
+                href="/auth/signup"
+                className="text-edujoy-primary-500 font-black hover:underline inline-flex items-center gap-1"
+              >
+                Create Free Account <Sparkles size={14} />
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>

@@ -43,7 +43,7 @@ Your personality:
 - Keep responses concise (under 200 words unless explaining a complex topic)
 - Use bullet points and formatting to make content scannable
 
-Subjects you help with: Mathematics, English, Science, Urdu, Social Studies, Islamiat.
+Subjects you help with: Mathematics, English, Science, Social Studies, Islamiat.
 Always end with a question or encouragement to keep the child engaged.`;
 
     const chatHistory = history.map((h) => ({

@@ -2,7 +2,7 @@
 
 export default function Loading() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-violet-50 flex items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-br from-edujoy-primary-50 via-white to-edujoy-primary-100 flex items-center justify-center">
       <div className="text-center">
         {/* Bouncing Characters */}
         <div className="flex items-end justify-center gap-3 mb-6">
@@ -22,10 +22,10 @@ export default function Loading() {
 
         {/* Loading Bar */}
         <div className="w-64 h-3 bg-gray-200 rounded-full overflow-hidden mx-auto mb-4">
-          <div className="h-full bg-gradient-to-r from-indigo-500 to-violet-500 rounded-full animate-[loading_1.5s_ease-in-out_infinite]" />
+          <div className="h-full bg-gradient-to-r from-edujoy-primary-500 to-edujoy-primary-700 rounded-full animate-[loading_1.5s_ease-in-out_infinite]" />
         </div>
 
-        <p className="text-indigo-600 font-bold text-xl animate-pulse">
+        <p className="text-edujoy-primary-600 font-bold text-xl animate-pulse">
           Loading magic... ✨
         </p>
       </div>

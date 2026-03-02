@@ -21,19 +21,19 @@ const QUICK_ACTIONS = [
     label: "View Students",
     href: "/teacher",
     Icon: Users,
-    cls: "text-indigo-600 bg-indigo-50",
+    cls: "text-edujoy-primary-600 bg-edujoy-primary-50",
   },
   {
     label: "Manage Lessons",
     href: "/teacher",
     Icon: BookOpen,
-    cls: "text-blue-600   bg-blue-50",
+    cls: "text-fun-blue bg-blue-50",
   },
   {
     label: "Assignments",
     href: "/teacher",
     Icon: FileText,
-    cls: "text-violet-600 bg-violet-50",
+    cls: "text-edujoy-primary-700 bg-edujoy-primary-50",
   },
   {
     label: "Progress Reports",
@@ -60,25 +60,25 @@ const STATS = [
     label: "Students",
     value: "—",
     Icon: Users,
-    ring: "ring-indigo-100",
-    ico: "text-indigo-500",
-    bg: "bg-indigo-50",
+    ring: "ring-edujoy-primary-100",
+    ico: "text-edujoy-primary-500",
+    bg: "bg-edujoy-primary-50",
   },
   {
     label: "Lessons",
     value: "—",
     Icon: BookOpen,
-    ring: "ring-blue-100",
-    ico: "text-blue-500",
+    ring: "ring-fun-blue/20",
+    ico: "text-fun-blue",
     bg: "bg-blue-50",
   },
   {
     label: "Assignments",
     value: "—",
     Icon: ClipboardList,
-    ring: "ring-violet-100",
-    ico: "text-violet-500",
-    bg: "bg-violet-50",
+    ring: "ring-edujoy-primary-200",
+    ico: "text-edujoy-primary-600",
+    bg: "bg-edujoy-primary-50",
   },
   {
     label: "Avg Score",
@@ -106,7 +106,7 @@ export default function TeacherDashboard() {
             Manage your classes, lessons, and student progress.
           </p>
         </div>
-        <button className="inline-flex items-center gap-2 bg-indigo-600 text-white text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-indigo-700 transition-colors self-start sm:self-auto">
+        <button className="inline-flex items-center gap-2 bg-edujoy-primary-600 text-white text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-edujoy-primary-700 transition-colors self-start sm:self-auto">
           <PlusCircle size={14} /> New Lesson
         </button>
       </div>
@@ -141,8 +141,8 @@ export default function TeacherDashboard() {
             <h2 className="font-bold text-gray-900">Recent Activity</h2>
           </div>
           <div className="flex flex-col items-center justify-center py-12 text-center">
-            <div className="bg-blue-50 p-4 rounded-2xl mb-4">
-              <GraduationCap size={28} className="text-blue-400" />
+            <div className="bg-edujoy-primary-50 p-4 rounded-2xl mb-4">
+              <GraduationCap size={28} className="text-edujoy-primary-400" />
             </div>
             <p className="text-sm font-semibold text-gray-700 mb-1">
               No activity yet
@@ -153,7 +153,7 @@ export default function TeacherDashboard() {
             </p>
             <Link
               href="/teacher"
-              className="mt-4 inline-flex items-center gap-2 bg-indigo-600 text-white text-xs font-bold px-4 py-2.5 rounded-xl hover:bg-indigo-700 transition-colors"
+              className="mt-4 inline-flex items-center gap-2 bg-edujoy-primary-600 text-white text-xs font-bold px-4 py-2.5 rounded-xl hover:bg-edujoy-primary-700 transition-colors"
             >
               Go to Classes <ArrowRight size={12} />
             </Link>

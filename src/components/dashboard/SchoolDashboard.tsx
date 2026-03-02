@@ -21,19 +21,19 @@ const QUICK_LINKS = [
     label: "Teachers",
     href: "/school",
     Icon: GraduationCap,
-    cls: "text-indigo-600 bg-indigo-50",
+    cls: "text-edujoy-primary-600 bg-edujoy-primary-50",
   },
   {
     label: "Students",
     href: "/school",
     Icon: Users,
-    cls: "text-blue-600   bg-blue-50",
+    cls: "text-fun-blue bg-blue-50",
   },
   {
     label: "Curriculum",
     href: "/school",
     Icon: BookOpen,
-    cls: "text-violet-600 bg-violet-50",
+    cls: "text-edujoy-primary-700 bg-edujoy-primary-50",
   },
   {
     label: "Reports",
@@ -60,25 +60,25 @@ const STATS = [
     label: "Teachers",
     value: "—",
     Icon: GraduationCap,
-    ring: "ring-indigo-100",
-    ico: "text-indigo-500",
-    bg: "bg-indigo-50",
+    ring: "ring-edujoy-primary-100",
+    ico: "text-edujoy-primary-500",
+    bg: "bg-edujoy-primary-50",
   },
   {
     label: "Students",
     value: "—",
     Icon: Users,
-    ring: "ring-blue-100",
-    ico: "text-blue-500",
+    ring: "ring-fun-blue/20",
+    ico: "text-fun-blue",
     bg: "bg-blue-50",
   },
   {
     label: "Classes",
     value: "—",
     Icon: BookOpen,
-    ring: "ring-violet-100",
-    ico: "text-violet-500",
-    bg: "bg-violet-50",
+    ring: "ring-edujoy-primary-200",
+    ico: "text-edujoy-primary-600",
+    bg: "bg-edujoy-primary-50",
   },
   {
     label: "Active",
@@ -106,7 +106,7 @@ export default function SchoolDashboard() {
         </div>
         <Link
           href="/school"
-          className="inline-flex items-center gap-2 bg-indigo-600 text-white text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-indigo-700 transition-colors self-start sm:self-auto"
+          className="inline-flex items-center gap-2 bg-edujoy-primary-600 text-white text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-edujoy-primary-700 transition-colors self-start sm:self-auto"
         >
           <Building2 size={14} /> School Settings
         </Link>
@@ -142,14 +142,14 @@ export default function SchoolDashboard() {
             <h2 className="font-bold text-gray-900">Enrollment Overview</h2>
             <Link
               href="/school"
-              className="text-xs text-indigo-600 font-semibold hover:underline flex items-center gap-1"
+              className="text-xs text-edujoy-primary-600 font-semibold hover:underline flex items-center gap-1"
             >
               Manage <ArrowRight size={12} />
             </Link>
           </div>
           <div className="flex flex-col items-center justify-center py-12 text-center">
-            <div className="bg-indigo-50 p-4 rounded-2xl mb-4">
-              <Building2 size={28} className="text-indigo-400" />
+            <div className="bg-edujoy-primary-50 p-4 rounded-2xl mb-4">
+              <Building2 size={28} className="text-edujoy-primary-400" />
             </div>
             <p className="text-sm font-semibold text-gray-700 mb-1">
               School setup in progress
@@ -160,7 +160,7 @@ export default function SchoolDashboard() {
             </p>
             <Link
               href="/school"
-              className="mt-4 inline-flex items-center gap-2 bg-indigo-600 text-white text-xs font-bold px-4 py-2.5 rounded-xl hover:bg-indigo-700 transition-colors"
+              className="mt-4 inline-flex items-center gap-2 bg-edujoy-primary-600 text-white text-xs font-bold px-4 py-2.5 rounded-xl hover:bg-edujoy-primary-700 transition-colors"
             >
               Set Up School <ArrowRight size={12} />
             </Link>
@@ -196,18 +196,18 @@ export default function SchoolDashboard() {
           </div>
 
           {/* Upgrade CTA */}
-          <div className="bg-indigo-600 rounded-xl p-4 text-white">
+          <div className="bg-edujoy-primary-600 rounded-xl p-4 text-white">
             <div className="flex items-center gap-2 mb-1.5">
-              <Bell size={14} className="text-indigo-200" />
-              <span className="text-sm font-bold">School Plan</span>
+              <Bell size={14} className="text-edujoy-primary-200" />
+              <span className="text-sm font-bold">New Updates</span>
             </div>
-            <p className="text-xs text-indigo-200 mb-3 leading-relaxed">
+            <p className="text-xs text-edujoy-primary-200 mb-3 leading-relaxed">
               Get discounted access for your entire school — unlimited teachers
               and students.
             </p>
             <Link
               href="/pricing"
-              className="inline-flex items-center gap-1.5 bg-white text-indigo-700 text-xs font-bold px-3 py-2 rounded-lg hover:bg-indigo-50 transition-colors"
+              className="inline-flex items-center gap-1.5 bg-white text-edujoy-primary-700 text-xs font-bold px-3 py-2 rounded-lg hover:bg-edujoy-primary-50 transition-colors"
             >
               View Plans <ArrowRight size={12} />
             </Link>

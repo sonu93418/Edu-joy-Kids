@@ -1,12 +1,11 @@
 "use client";
 
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import {
   BookOpen,
   Search,
-  Filter,
   Star,
   Play,
   Lock,
@@ -14,405 +13,299 @@ import {
   Clock,
   Zap,
   ChevronRight,
+  GraduationCap,
 } from "lucide-react";
+import {
+  SUBJECTS,
+  GRADES,
+  getLessonsBySubjectAndGrade,
+  getLessonsBySubject,
+  getAvailableGradesForSubject,
+  type Lesson,
+} from "@/lib/lesson-data";
+import {
+  SUBJECT_ICON_MAP,
+  LESSON_TYPE_ICON_MAP,
+} from "@/components/ui/SubjectIcons";
 
-const SUBJECTS = [
-  {
-    id: "english",
-    emoji: "📖",
-    label: "English",
-    color: "from-blue-400 to-blue-600",
-    lessons: 25,
-    completed: 18,
-  },
-  {
-    id: "math",
-    emoji: "🔢",
-    label: "Math",
-    color: "from-purple-400 to-purple-600",
-    lessons: 24,
-    completed: 14,
-  },
-  {
-    id: "science",
-    emoji: "🔬",
-    label: "Science",
-    color: "from-green-400 to-green-600",
-    lessons: 20,
-    completed: 17,
-  },
-  {
-    id: "urdu",
-    emoji: "📝",
-    label: "Urdu",
-    color: "from-pink-400 to-red-500",
-    lessons: 20,
-    completed: 9,
-  },
-  {
-    id: "islamiat",
-    emoji: "🌙",
-    label: "Islamiat",
-    color: "from-orange-400 to-orange-600",
-    lessons: 20,
-    completed: 18,
-  },
-  {
-    id: "social",
-    emoji: "🌍",
-    label: "Social Studies",
-    color: "from-teal-400 to-teal-600",
-    lessons: 20,
-    completed: 6,
-  },
-];
-
-const LESSONS: Record<
-  string,
-  Array<{
-    id: string;
-    title: string;
-    duration: string;
-    xp: number;
-    stars: number;
-    status: "completed" | "available" | "locked";
-    type: string;
-    emoji: string;
-  }>
-> = {
-  english: [
-    {
-      id: "e1",
-      title: "The Alphabet Adventure",
-      duration: "10 min",
-      xp: 40,
-      stars: 3,
-      status: "completed",
-      type: "animated",
-      emoji: "🔤",
-    },
-    {
-      id: "e2",
-      title: "Vowels & Consonants",
-      duration: "12 min",
-      xp: 45,
-      stars: 3,
-      status: "completed",
-      type: "interactive",
-      emoji: "🗣️",
-    },
-    {
-      id: "e3",
-      title: "CVC Words",
-      duration: "15 min",
-      xp: 50,
-      stars: 2,
-      status: "completed",
-      type: "quiz",
-      emoji: "📚",
-    },
-    {
-      id: "e4",
-      title: "Sight Words Practice",
-      duration: "10 min",
-      xp: 40,
-      stars: 0,
-      status: "available",
-      type: "game",
-      emoji: "👁️",
-    },
-    {
-      id: "e5",
-      title: "Simple Sentences",
-      duration: "18 min",
-      xp: 60,
-      stars: 0,
-      status: "available",
-      type: "interactive",
-      emoji: "✍️",
-    },
-    {
-      id: "e6",
-      title: "Nouns & Verbs",
-      duration: "20 min",
-      xp: 65,
-      stars: 0,
-      status: "locked",
-      type: "animated",
-      emoji: "🔒",
-    },
-  ],
-  math: [
-    {
-      id: "m1",
-      title: "Counting 1-20",
-      duration: "8 min",
-      xp: 35,
-      stars: 3,
-      status: "completed",
-      type: "game",
-      emoji: "🔢",
-    },
-    {
-      id: "m2",
-      title: "Addition Fun",
-      duration: "12 min",
-      xp: 50,
-      stars: 3,
-      status: "completed",
-      type: "interactive",
-      emoji: "➕",
-    },
-    {
-      id: "m3",
-      title: "Subtraction Stories",
-      duration: "15 min",
-      xp: 55,
-      stars: 3,
-      status: "completed",
-      type: "animated",
-      emoji: "➖",
-    },
-    {
-      id: "m4",
-      title: "Shapes & Patterns",
-      duration: "10 min",
-      xp: 40,
-      stars: 0,
-      status: "available",
-      type: "quiz",
-      emoji: "🔷",
-    },
-    {
-      id: "m5",
-      title: "Fractions Intro",
-      duration: "20 min",
-      xp: 70,
-      stars: 0,
-      status: "available",
-      type: "interactive",
-      emoji: "🍕",
-    },
-  ],
-  science: [
-    {
-      id: "s1",
-      title: "Plants & Photosynthesis",
-      duration: "15 min",
-      xp: 55,
-      stars: 3,
-      status: "completed",
-      type: "animated",
-      emoji: "🌱",
-    },
-    {
-      id: "s2",
-      title: "Animal Kingdom",
-      duration: "18 min",
-      xp: 60,
-      stars: 2,
-      status: "completed",
-      type: "interactive",
-      emoji: "🦁",
-    },
-    {
-      id: "s3",
-      title: "Water Cycle",
-      duration: "12 min",
-      xp: 50,
-      stars: 0,
-      status: "available",
-      type: "animated",
-      emoji: "💧",
-    },
-  ],
-};
-
-const TYPE_COLORS: Record<string, string> = {
-  animated: "bg-blue-100 text-blue-600",
-  interactive: "bg-purple-100 text-purple-600",
-  quiz: "bg-orange-100 text-orange-600",
-  game: "bg-green-100 text-green-600",
-  story: "bg-pink-100 text-pink-600",
+const DIFFICULTY_COLOR: Record<string, string> = {
+  easy: "bg-green-100 text-green-700",
+  medium: "bg-yellow-100 text-yellow-700",
+  hard: "bg-red-100 text-red-700",
 };
 
 export default function LearnPage() {
   const [activeSubject, setActiveSubject] = useState("english");
-  const [search, setSearch] = useState("");
-  const lessons = (LESSONS[activeSubject] || []).filter((l) =>
-    l.title.toLowerCase().includes(search.toLowerCase()),
-  );
-  const subjectInfo = SUBJECTS.find((s) => s.id === activeSubject)!;
+  const [selectedGrade, setSelectedGrade] = useState("All Grades");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const subject = SUBJECTS.find((s) => s.id === activeSubject)!;
+  const availableGrades = getAvailableGradesForSubject(activeSubject);
+
+  const lessons: Lesson[] = useMemo(() => {
+    let list =
+      selectedGrade === "All Grades"
+        ? getLessonsBySubject(activeSubject)
+        : getLessonsBySubjectAndGrade(activeSubject, selectedGrade);
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      list = list.filter(
+        (l) =>
+          l.title.toLowerCase().includes(q) ||
+          l.grade.toLowerCase().includes(q),
+      );
+    }
+    return list;
+  }, [activeSubject, selectedGrade, searchQuery]);
+
+  const completedCount = lessons.filter((l) => l.status === "completed").length;
+  const progressPct =
+    lessons.length > 0
+      ? Math.round((completedCount / lessons.length) * 100)
+      : 0;
 
   return (
     <DashboardLayout>
-      <div className="w-full space-y-6">
+      <div className="p-4 md:p-6 space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-2xl font-black text-gray-800 flex items-center gap-2">
-            <BookOpen size={28} className="text-edujoy-primary-500" /> Learn &
-            Grow
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-800 flex items-center gap-2">
+            <BookOpen className="w-7 h-7 text-edujoy-primary-500" />
+            My Lessons
           </h1>
-          <p className="text-gray-500 mt-1">
-            Pick a subject and start your adventure!
+          <p className="text-gray-500 text-sm mt-1">
+            Pakistan curriculum · Play Group – Class 5
           </p>
         </div>
 
         {/* Subject Tabs */}
-        <div>
-          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-            {SUBJECTS.map((subject) => {
-              const pct = Math.round(
-                (subject.completed / subject.lessons) * 100,
-              );
-              return (
-                <button
-                  key={subject.id}
-                  onClick={() => setActiveSubject(subject.id)}
-                  className={`flex-shrink-0 flex flex-col items-center gap-1 px-4 py-3 rounded-2xl border-2 transition-all ${
-                    activeSubject === subject.id
-                      ? `bg-gradient-to-br ${subject.color} border-transparent text-white shadow-md`
-                      : "border-gray-200 bg-white text-gray-600 hover:border-gray-300"
-                  }`}
-                >
-                  <span className="text-2xl">{subject.emoji}</span>
-                  <span className="text-xs font-black">{subject.label}</span>
-                  <span className="text-xs opacity-80">{pct}%</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Subject Progress Banner */}
-        <div
-          className={`rounded-3xl bg-gradient-to-r ${subjectInfo.color} p-4 text-white flex items-center justify-between`}
-        >
-          <div>
-            <p className="font-black text-lg">
-              {subjectInfo.emoji} {subjectInfo.label}
-            </p>
-            <p className="text-sm opacity-80">
-              {subjectInfo.completed} of {subjectInfo.lessons} lessons completed
-            </p>
-          </div>
-          <div className="text-right">
-            <p className="text-3xl font-black">
-              {Math.round((subjectInfo.completed / subjectInfo.lessons) * 100)}%
-            </p>
-            <p className="text-xs opacity-80">Progress</p>
-          </div>
-        </div>
-
-        {/* Search */}
-        <div className="relative">
-          <Search
-            size={18}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-          />
-          <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search lessons..."
-            className="w-full pl-11 pr-4 py-3 rounded-2xl border-2 border-gray-200 focus:border-edujoy-primary-400 focus:outline-none font-medium text-gray-700"
-          />
-        </div>
-
-        {/* Lessons Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {lessons.map((lesson, i) => (
-            <div key={lesson.id}>
-              <Link
-                href={
-                  lesson.status !== "locked"
-                    ? `/student/lesson/${lesson.id}`
-                    : "#"
-                }
+        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+          {SUBJECTS.map((s) => {
+            const subLessons = getLessonsBySubject(s.id);
+            const done = subLessons.filter(
+              (l) => l.status === "completed",
+            ).length;
+            const pct =
+              subLessons.length > 0
+                ? Math.round((done / subLessons.length) * 100)
+                : 0;
+            const IconComponent = SUBJECT_ICON_MAP[s.id];
+            return (
+              <button
+                key={s.id}
+                onClick={() => {
+                  setActiveSubject(s.id);
+                  setSelectedGrade("All Grades");
+                }}
+                className={`flex-shrink-0 flex flex-col items-center gap-1 px-4 py-3 rounded-2xl text-sm font-semibold transition-all min-w-[90px] ${
+                  activeSubject === s.id
+                    ? `bg-gradient-to-br ${s.color} text-white shadow-lg scale-105`
+                    : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"
+                }`}
               >
-                <div
-                  className={`group flex items-start gap-4 p-4 rounded-2xl border-2 transition-all ${
-                    lesson.status === "locked"
-                      ? "border-gray-100 bg-gray-50 opacity-60 cursor-not-allowed"
-                      : "border-gray-100 bg-white hover:border-edujoy-primary-200 hover:shadow-fun cursor-pointer"
-                  }`}
+                {IconComponent && <IconComponent size={20} />}
+                <span className="text-xs">{s.label}</span>
+                <span
+                  className={`text-xs ${activeSubject === s.id ? "opacity-80" : "text-gray-400"}`}
                 >
-                  {/* Lesson Icon */}
-                  <div
-                    className={`w-14 h-14 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0 transition-transform ${lesson.status !== "locked" ? "group-hover:scale-110" : ""} ${
-                      lesson.status === "completed"
-                        ? `bg-gradient-to-br ${subjectInfo.color}`
-                        : lesson.status === "available"
-                          ? "bg-edujoy-primary-50"
-                          : "bg-gray-100"
-                    }`}
-                  >
-                    {lesson.status === "locked" ? (
-                      <Lock size={24} className="text-gray-400" />
-                    ) : (
-                      lesson.emoji
-                    )}
-                  </div>
-
-                  {/* Content */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-start justify-between gap-2">
-                      <p className="font-black text-gray-800">{lesson.title}</p>
-                      {lesson.status === "completed" && (
-                        <CheckCircle
-                          size={18}
-                          className="text-fun-green flex-shrink-0 mt-0.5"
-                        />
-                      )}
-                    </div>
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className="text-xs text-gray-400 flex items-center gap-1">
-                        <Clock size={10} /> {lesson.duration}
-                      </span>
-                      <span className="text-xs text-fun-orange flex items-center gap-1 font-bold">
-                        <Zap size={10} /> +{lesson.xp} XP
-                      </span>
-                      <span
-                        className={`text-xs font-bold px-2 py-0.5 rounded-full capitalize ${TYPE_COLORS[lesson.type] || "bg-gray-100 text-gray-500"}`}
-                      >
-                        {lesson.type}
-                      </span>
-                    </div>
-                    {lesson.status === "completed" && (
-                      <div className="flex gap-0.5 mt-1.5">
-                        {[1, 2, 3].map((s) => (
-                          <Star
-                            key={s}
-                            size={14}
-                            className={
-                              s <= lesson.stars
-                                ? "text-yellow-400 fill-yellow-400"
-                                : "text-gray-200 fill-gray-200"
-                            }
-                          />
-                        ))}
-                      </div>
-                    )}
-                    {lesson.status === "available" && (
-                      <button className="mt-2 flex items-center gap-1.5 px-3 py-1 bg-edujoy-primary-500 text-white text-xs font-black rounded-xl hover:bg-edujoy-primary-600 transition-colors">
-                        <Play size={10} /> Start Lesson
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </Link>
-            </div>
-          ))}
+                  {pct}%
+                </span>
+              </button>
+            );
+          })}
         </div>
 
-        {lessons.length === 0 && (
+        {/* Grade + Search bar */}
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide flex-1">
+            {["All Grades", ...availableGrades].map((g) => (
+              <button
+                key={g}
+                onClick={() => setSelectedGrade(g)}
+                className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all ${
+                  selectedGrade === g
+                    ? "bg-edujoy-primary-600 text-white shadow"
+                    : "bg-white text-gray-600 border border-gray-200 hover:border-edujoy-primary-300"
+                }`}
+              >
+                <GraduationCap className="w-3.5 h-3.5" />
+                {g}
+              </button>
+            ))}
+          </div>
+          <div className="relative min-w-[200px]">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search lessons..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-gray-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-edujoy-primary-300"
+            />
+          </div>
+        </div>
+
+        {/* Subject progress banner */}
+        <div
+          className={`rounded-2xl bg-gradient-to-r ${subject.color} p-4 text-white`}
+        >
+          <div className="flex items-center justify-between mb-2">
+            <div>
+              {(() => {
+                const SubjectIcon = SUBJECT_ICON_MAP[activeSubject];
+                return SubjectIcon ? (
+                  <SubjectIcon size={24} className="inline mr-2" />
+                ) : null;
+              })()}
+              <span className="font-bold text-lg">{subject.label}</span>
+              {selectedGrade !== "All Grades" && (
+                <span className="ml-2 text-sm opacity-80">
+                  · {selectedGrade}
+                </span>
+              )}
+            </div>
+            <span className="text-sm opacity-90 font-medium">
+              {completedCount}/{lessons.length} lessons
+            </span>
+          </div>
+          <div className="bg-white/30 rounded-full h-2">
+            <div
+              className="bg-white rounded-full h-2 transition-all duration-500"
+              style={{ width: `${progressPct}%` }}
+            />
+          </div>
+          <p className="text-xs mt-1 opacity-80">{progressPct}% complete</p>
+        </div>
+
+        {/* Lesson Grid */}
+        {lessons.length === 0 ? (
           <div className="text-center py-16 text-gray-400">
-            <p className="text-4xl mb-3">🔍</p>
-            <p className="font-bold">
-              No lessons found for &quot;{search}&quot;
-            </p>
+            <BookOpen className="w-12 h-12 mx-auto mb-3 opacity-40" />
+            <p className="font-medium">No lessons found</p>
+            <p className="text-sm mt-1">Try a different grade or search term</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {lessons.map((lesson) => (
+              <LessonCard key={lesson.id} lesson={lesson} subject={subject} />
+            ))}
           </div>
         )}
       </div>
     </DashboardLayout>
+  );
+}
+
+function LessonCard({
+  lesson,
+  subject,
+}: {
+  lesson: Lesson;
+  subject: { color: string };
+}) {
+  const isLocked = lesson.status === "locked";
+  const isCompleted = lesson.status === "completed";
+
+  return (
+    <div
+      className={`relative bg-white rounded-2xl border-2 transition-all duration-200 overflow-hidden shadow-sm ${
+        isLocked
+          ? "border-gray-200 opacity-60"
+          : isCompleted
+            ? "border-green-300 hover:shadow-md hover:-translate-y-0.5"
+            : "border-edujoy-primary-200 hover:shadow-md hover:border-edujoy-primary-400 hover:-translate-y-0.5"
+      }`}
+    >
+      <div
+        className={`h-1.5 w-full ${isCompleted ? "bg-green-400" : isLocked ? "bg-gray-300" : "bg-gradient-to-r from-edujoy-primary-400 to-fun-pink"}`}
+      />
+      <div className="p-4">
+        <div className="flex justify-between items-start mb-3">
+          {(() => {
+            const SubjectIcon = SUBJECT_ICON_MAP[lesson.subjectId];
+            return SubjectIcon ? (
+              <SubjectIcon size={32} className="text-edujoy-primary-500" />
+            ) : null;
+          })()}
+          <StatusBadge status={lesson.status} />
+        </div>
+        <h3 className="font-bold text-gray-800 text-sm leading-tight mb-1">
+          {lesson.title}
+        </h3>
+        <p className="text-xs text-gray-500 mb-3 flex items-center gap-1">
+          {lesson.grade} ·
+          {(() => {
+            const TypeIcon = LESSON_TYPE_ICON_MAP[lesson.type];
+            return TypeIcon ? <TypeIcon size={14} className="inline" /> : null;
+          })()}{" "}
+          {lesson.type}
+        </p>
+        <div className="flex items-center gap-3 text-xs text-gray-500 mb-4">
+          <span className="flex items-center gap-1">
+            <Clock className="w-3.5 h-3.5" />
+            {lesson.duration}
+          </span>
+          <span className="flex items-center gap-1 text-yellow-600">
+            <Zap className="w-3.5 h-3.5" />
+            {lesson.xpReward} XP
+          </span>
+          <span
+            className={`px-2 py-0.5 rounded-full text-xs font-medium ${DIFFICULTY_COLOR[lesson.difficulty]}`}
+          >
+            {lesson.difficulty}
+          </span>
+        </div>
+        {isCompleted && lesson.stars && (
+          <div className="flex gap-0.5 mb-3">
+            {[1, 2, 3].map((i) => (
+              <Star
+                key={i}
+                className={`w-4 h-4 ${i <= lesson.stars! ? "fill-yellow-400 text-yellow-400" : "text-gray-200"}`}
+              />
+            ))}
+          </div>
+        )}
+        {isLocked ? (
+          <button
+            disabled
+            className="w-full flex items-center justify-center gap-2 py-2 rounded-xl bg-gray-100 text-gray-400 text-sm font-medium cursor-not-allowed"
+          >
+            <Lock className="w-4 h-4" />
+            Locked
+          </button>
+        ) : (
+          <Link
+            href={`/student/lesson/${lesson.id}`}
+            className="w-full flex items-center justify-center gap-2 py-2 rounded-xl bg-gradient-to-r from-edujoy-primary-500 to-fun-pink text-white text-sm font-semibold hover:from-edujoy-primary-600 hover:to-fun-pink transition-all"
+          >
+            {isCompleted ? "Replay" : "Start Lesson"}
+            <ChevronRight className="w-4 h-4" />
+          </Link>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function StatusBadge({ status }: { status: string }) {
+  if (status === "completed")
+    return (
+      <span className="flex items-center gap-1 bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded-full">
+        <CheckCircle className="w-3 h-3" />
+        Done
+      </span>
+    );
+  if (status === "locked")
+    return (
+      <span className="flex items-center gap-1 bg-gray-100 text-gray-500 text-xs font-bold px-2 py-1 rounded-full">
+        <Lock className="w-3 h-3" />
+        Locked
+      </span>
+    );
+  return (
+    <span className="flex items-center gap-1 bg-edujoy-primary-100 text-edujoy-primary-700 text-xs font-bold px-2 py-1 rounded-full">
+      <Play className="w-3 h-3 fill-edujoy-primary-700" />
+      New
+    </span>
   );
 }

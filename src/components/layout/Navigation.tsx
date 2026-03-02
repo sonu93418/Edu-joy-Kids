@@ -28,7 +28,7 @@ export default function Navigation() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 flex-shrink-0">
-            <div className="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center">
+            <div className="w-9 h-9 bg-edujoy-primary-600 rounded-xl flex items-center justify-center">
               <BookOpen size={18} className="text-white" />
             </div>
             <div>
@@ -47,7 +47,7 @@ export default function Navigation() {
               <Link
                 key={label}
                 href={href}
-                className="text-sm font-medium text-gray-600 hover:text-indigo-600 px-3 py-2 rounded-lg hover:bg-indigo-50 transition-colors"
+                className="text-sm font-medium text-gray-600 hover:text-edujoy-primary-600 px-3 py-2 rounded-lg hover:bg-edujoy-primary-50 transition-colors"
               >
                 {label}
               </Link>
@@ -64,7 +64,7 @@ export default function Navigation() {
             </Link>
             <Link
               href="/auth/signup"
-              className="inline-flex items-center gap-1.5 text-sm font-bold text-white bg-indigo-600 px-4 py-2 rounded-xl hover:bg-indigo-700 transition-colors"
+              className="inline-flex items-center gap-1.5 text-sm font-bold text-white bg-edujoy-primary-600 px-4 py-2 rounded-xl hover:bg-edujoy-primary-700 transition-colors"
             >
               <Zap size={13} /> Start Free
             </Link>
@@ -90,7 +90,7 @@ export default function Navigation() {
                 key={label}
                 href={href}
                 onClick={() => setOpen(false)}
-                className="block text-sm font-medium text-gray-700 hover:text-indigo-600 px-3 py-2.5 rounded-xl hover:bg-indigo-50 transition-colors"
+                className="block text-sm font-medium text-gray-700 hover:text-edujoy-primary-600 px-3 py-2.5 rounded-xl hover:bg-edujoy-primary-50 transition-colors"
               >
                 {label}
               </Link>
@@ -107,7 +107,7 @@ export default function Navigation() {
             <Link
               href="/auth/signup"
               onClick={() => setOpen(false)}
-              className="inline-flex items-center justify-center gap-2 text-sm font-bold text-white bg-indigo-600 px-4 py-2.5 rounded-xl hover:bg-indigo-700 transition-colors"
+              className="inline-flex items-center justify-center gap-2 text-sm font-bold text-white bg-edujoy-primary-600 px-4 py-2.5 rounded-xl hover:bg-edujoy-primary-700 transition-colors"
             >
               <Zap size={13} /> Start Learning Free
             </Link>
